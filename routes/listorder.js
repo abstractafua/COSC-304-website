@@ -26,7 +26,7 @@ app.get('/', function(req, res, next) {
         for (let i = 0; i < results.recordset.length; i++) {
             let result = results.recordset[i];
             res.write("<tr><td>" + result.orderID + "</td><td>" + result.orderDate + "</td></tr>"+  result.customerID + "</td><td>" 
-            + result.firstName + result.lastName +  "</td></tr>"+  "</td></tr>");
+            + result.firstName + result.lastName +  "</td></tr>"+ result.totalAmount + "</td></tr>");
         }
         res.write("</table>");
 
