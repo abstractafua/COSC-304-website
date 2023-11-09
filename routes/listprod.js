@@ -2,26 +2,20 @@ const express = require('express');
 const router = express.Router();
 const sql = require('mssql');
 
-router.get('/', function(req, res, next) {
 
     // Rendering header
 app.get('/', function (req, res) {
     res.setHeader('Content-Type', 'text/html');
 
     res.write("<title>Search for the products you want to buy: </title>")
-    res.write("<title>Querying Using Node.js and Forms</title>");
-    res.write("<h1>Enter the name and/or department to search for:</h1>");
+
+    //search bar 
     res.write('<form method="get" action="EmpQuery">');
-    res.write('Employee name: <input type="text" name="empname" size="25">');
-    res.write('Department: <input type="text" name="deptnum" size="5">');
+    res.write('Product Name: <input type="text" name="productName" size="25">');
     res.write('<input type="submit" value="Submit">');
-    res.write('<input type="reset" value="Reset">');
+    res.write('<input type="reset" value="Reset"> (Leave blank for all products)');
     res.write('</form>');
 })
-
-    res.setHeader('Content-Type', 'text/html');
-    
-
 
     // Get the product name to search for
     (async function(){
@@ -43,10 +37,8 @@ app.get('/', function (req, res) {
                 For each product in the order
                     Write out product information 
         **/
-                    
                     res.write("<tr><th>Product Name</th><th>Price</th><th>");
-    
-                //    res.write("<tr><th>Add to Cart</th><th></th><th>");
+                   res.write("<tr><th>Add to Cart</th><th></th><th>");
         /**
         Useful code for formatting currency:
         /** */    

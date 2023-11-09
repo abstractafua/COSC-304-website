@@ -68,6 +68,5 @@ app.get('/', function(req, res, next) {
     res.end();
 })});
 
-app.listen(3000)
 
 module.exports = router;
