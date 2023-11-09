@@ -17,6 +17,7 @@ app.get('/', function (req, res) {
     res.write('</form>');
 })
 
+app.get('/', function (req, res) {
     // Get the product name to search for
     (async function(){
         /** Create connection, and validate that it connected successfully **/
@@ -37,21 +38,16 @@ app.get('/', function (req, res) {
                 For each product in the order
                     Write out product information 
         **/
-                    res.write("<tr><th>Product Name</th><th>Price</th><th>");
-                   res.write("<tr><th>Add to Cart</th><th></th><th>");
-        /**
-        Useful code for formatting currency:
-        /** */    
+                    res.write("<h3>Product Name</h3><h3>Price</h3>");
+                   res.write("<p><a>Add to Cart</a></p>");  
             
             for (let i = 0; i < results.recordset.length; i++) {
                  let result = results.recordset[i];
                  let num = result.totalAmount;
                  num = num.toFixed();
     
-                res.write("<tr><td>" + result.orderID + "</td><td>" + result.orderDate + "</td></tr>"+  result.customerID + "</td><td>" 
-                + result.firstName + result.lastName +  "</td></tr>"+ result.totalAmount + "</td></tr>");
+                res.write("<p>" + result.productName + "</p><p>" + result.produtPrice + "</td></tr>");
             }
-            res.write("</table>");
     
             let results2 = await pool.request().query(sqlQuery2);
     
@@ -59,10 +55,9 @@ app.get('/', function (req, res) {
                 let results2 = results2.recordset[i];
                  let num2 = results2.totalAmount;
                  num2 = num.toFixed();
-                res.write("<tr><td>" + results2.productId + "</td><td>" + results2.quantity + "</td></tr>"+  results2.price );
+                 res.write("<td>" + results2.productId + "</td><td>" + results2.quantity + "</td><td>"+  results2.price  );
             }
     
-             res.write("</td><td></table>");
     
             res.end();
     
@@ -73,14 +68,12 @@ app.get('/', function (req, res) {
         }
     
         res.end();
-    })});
+    });
     
     app.listen(3000)
     
     module.exports = router;
     let name = req.query.productName;
-
-    let sql1 = " SELECT * from "
     
     /** $name now contains the search string the user entered
      Use it to build a query and print out the results. **/
@@ -93,16 +86,13 @@ app.get('/', function (req, res) {
     For each product create a link of the form
     addcart?id=<productId>&name=<productName>&price=<productPrice>
     **/
-
     /**
         Useful code for formatting currency:
         let num = 2.89999;
         num = num.toFixed(2);
     **/
 
-
-
     res.end();
-});
+})
 
 module.exports = router;
