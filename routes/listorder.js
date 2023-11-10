@@ -8,8 +8,33 @@ router.get('/', function(req, res, next) {
     res.write('<title>YOUR NAME Grocery Order List</title>');
 
     /** Create connection, and validate that it connected successfully **/
+    (async function() {
+        try {
 
-    /**
+             let pool = await sql.connect(dbConfig);
+             let sqlQuery = "SELECT ordersummary.orderID,ordersummary.orderDate, customer.customerId, customer.firstName, cutsomer.lastName, ordersummary.totalAmount" +
+                                   "FROM ordersummary O JOIN customer C ON O.customerID=C.customerID";
+        
+                                  let results = await pool.request().query(sqlQuery);
+
+             res.write("<table><tr><th>Order ID</th><th>Order Date</th><th>Customer ID</th><th>Customer Name</th><th>Total Amount</th></tr>");
+
+             
+
+            res.end();
+        } catch(err) {
+            console.dir(err);
+            res.write(JSON.stringify(err));
+            res.end();
+        }
+    })();
+
+    res.end();
+});
+
+module.exports = router;
+
+  /**
     Useful code for formatting currency:
         let num = 2.87879778;
         num = num.toFixed(2);
@@ -24,11 +49,6 @@ router.get('/', function(req, res, next) {
             For each product in the order
                 Write out product information 
     **/
-
-    res.end();
-});
-
-module.exports = router;
 
     // Get the product name to search for
     // let name = req.query.productName;
