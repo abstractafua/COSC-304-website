@@ -15,7 +15,7 @@ const app = express();
 // This DB Config is accessible globally
 dbConfig = {    
   server: 'cosc304_sqlserver',
-  //database: 'orders',
+  database: 'orders',
   authentication: {
       type: 'default',
       options: {
@@ -26,7 +26,7 @@ dbConfig = {
   options: {      
     encrypt: false,      
     enableArithAbort:false,
-   // database: 'orders'
+   database: 'orders'
   }
 }
 
@@ -51,6 +51,7 @@ app.set('view engine', 'handlebars');
 // Setting up Express.js routes.
 // These present a "route" on the URL of the site.
 // Eg: http://127.0.0.1/loaddata
+
 app.use('/loaddata', loadData);
 app.use('/listorder', listOrder);
 app.use('/listprod', listProd);
@@ -58,6 +59,7 @@ app.use('/addcart', addCart);
 app.use('/showcart', showCart);
 app.use('/checkout', checkout);
 app.use('/order', order);
+
 
 // Rendering the main page
 app.get('/', function (req, res) {
