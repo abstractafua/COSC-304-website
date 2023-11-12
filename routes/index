@@ -1,0 +1,13 @@
+<!-- views/index.ejs -->
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Clickable Link Example</title>
+</head>
+<body>
+
+  <p><a href="<%= linkUrl %>"><%= linkText %></a></p>
+
+</body>
+</html>
