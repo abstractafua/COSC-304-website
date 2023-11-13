@@ -38,9 +38,9 @@ router.get('/', function(req, res, next) {
 
                 for (let i = 0; i < results.recordset.length; i++) {
                     let result = results.recordset[i];
-                    let productName = JSON.stringify(result.productName)
-                 //   console.log(result);
-                    res.write("<tr><td>Add to Cart</td><td>" + productName + "</td><td>" + '$' + result.price.toFixed(2) + "</td></tr>");
+                    let productName = "" + result.productName + "";
+                    console.log(result);
+                    res.write('<tr><td>Add to Cart</td><td>' + productName + '</td><td>' + '$' + result.price.toFixed(2) + '</td></tr>');
                 }
                 res.write("</table>");
 
