@@ -4,11 +4,11 @@ const sql = require('mssql');
 const moment = require('moment');
 
 router.get('/', function (req, res, next) {
-    res.setHeader('Content-Type', 'text/html');
+    res.write('<html><head><link rel="stylesheet" href="/css/main.css"></head><body>');
     res.write('<title>YOUR NAME Grocery Order List</title>');
     let sqlQuery = "SELECT ordersummary.orderID, ordersummary.orderDate, customer.customerId, customer.firstName, customer.lastName, ordersummary.totalAmount FROM ordersummary JOIN customer ON ordersummary.customerID=customer.customerID";
     let query2 = "SELECT productId, quantity, price FROM orderproduct WHERE orderId=@orderId";
-    
+
     (async function () {
         try {
             let pool = await sql.connect(dbConfig);
@@ -16,7 +16,7 @@ router.get('/', function (req, res, next) {
             res.write('<h1>Order list</h1>');
 
             let results = await pool.request().query(sqlQuery);
-            res.write("<table border='1'><tr><th>Order ID</th><th>Order Date</th><th>Customer ID</th><th>Customer Name</th><th>Total Amount</th></tr>");
+            res.write("<table class='content-table'><thead><tr><th>Order ID</th><th>Order Date</th><th>Customer ID</th><th>Customer Name</th><th>Total Amount</th></tr></thead>");
 
             for (let i = 0; i < results.recordset.length; i++) {
                 let result = results.recordset[i];
@@ -35,7 +35,7 @@ router.get('/', function (req, res, next) {
                 let results2 = await pool.request().input('orderId', sql.Int, orderId).query(query2);
 
                 if (results2.recordset.length > 0) {
-                    res.write("<td colspan='5'><table border='1'><tr><th>Product Id</th><th>Quantity</th><th>Price</th></tr>");
+                    res.write("<td colspan='5'><table class='content-table'><tr><th>Product Id</th><th>Quantity</th><th>Price</th></tr>");
 
                     for (let j = 0; j < results2.recordset.length; j++) {
                         let result2 = results2.recordset[j];
@@ -58,6 +58,8 @@ router.get('/', function (req, res, next) {
 });
 
 module.exports = router;
+
+
 
 /** Create connection, and validate that it connected successfully **/
 /**
