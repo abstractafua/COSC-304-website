@@ -2,46 +2,55 @@ const express = require('express');
 const router = express.Router();
 const sql = require('mssql');
 
+let productQuery = require('./EmpProjQuery');
+
 router.get('/', function(req, res, next) {
+    // Get the product name to search for
+
+    let name = req.query.productName; 
+
+    /** $name now contains the search string the user entered
+     Use it to build a query and print out the results. **/
+
     res.setHeader('Content-Type', 'text/html');
     res.write("<title>MY NAME Grocery</title>")
 
     res.write("<h1>Search for the products you want to buy: </h1>")
 
-    res.write('<form method="get" action="EmpQuery">');
+     res.write('<form method="get" action="productQuery">');
      res.write('Product Name: <input type="text" name="productName" size="25">');
      res.write('<input type="submit" value="Submit">');
      res.write('<input type="reset" value="Reset"> (Leave blank for all products)');
      res.write('</form>');
 
      res.write("<h2>All Products</h2>")
-     
+    
+    
+     let sqlQ1= "SELECT product.productName, product.productPrice as price FROM product";
 
-    // Get the product name to search for
-    let name = req.query.productName; 
-    /** $name now contains the search string the user entered
-     Use it to build a query and print out the results. **/
-
-     let sqlQ1= "SELECT product.productName, product.productPrice as price FROM product"
-
-     let sqlQ12 ="SELECT product.productName as pname, productPrice as price"
-     +  "FROM product JOIN orderproduct ON product.productId = orderproduct.productId" + 
-        "WHERE pname = @pname ";
-        
+     if (name){
+        name = "%" + req.query.productName + "%";
+        sqlQ1 = sqlQ1 + "WHERE productName=@productName AND productName LIKE @productName";
+    }
 
         (async function(){ 
             try{
-
                 res.write("<table><tr><th></th><th>Product Name</th><th>Price</th></tr>");
+
+                console.log("name is empty");
                 let pool = await sql.connect(dbConfig); 
+                console.log("sql connected");
                 let results = await pool.request().query(sqlQ1);
+                console.log("sql query results ready");
 
                 for (let i = 0; i < results.recordset.length; i++) {
                     let result = results.recordset[i];
                     let productName = "" + result.productName + "";
-                    console.log(result);
-                    res.write('<tr><td>Add to Cart</td><td>' + productName + '</td><td>' + '$' + result.price.toFixed(2) + '</td></tr>');
+                    console.log(productName);
+                    res.write('<tr><td><a href="addcart?id=<productId>&name=<productName>&price=<productPrice>"> Add to Cart</a></td><td>' + productName + '</td><td>' + '$' + result.price.toFixed(2) + '</td></tr>');
                 }
+
+             
                 res.write("</table>");
 
             }catch(err){
