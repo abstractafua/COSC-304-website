@@ -18,6 +18,10 @@ dbConfig = {
   password: '304#sa#pw',
   server: 'localhost', 
   database: 'orders',
+    options:{
+  enableArithAbort: true,
+  encrypt: true
+    }
 }
 
 // Setting up the session.
