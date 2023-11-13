@@ -1,6 +1,6 @@
 const express = require('express');
 const exphbs = require('express-handlebars');
-const session = require('express-session')
+const session = require('express-session');
 
 let loadData = require('./routes/loaddata');
 let listOrder = require('./routes/listorder');
@@ -12,31 +12,40 @@ let order = require('./routes/order');
 
 const app = express();
 
+// Serve your static HTML and CSS files
+app.use(express.static('html'));
+app.use('/css', express.static('css')); // Serve the CSS files
+
 // This DB Config is accessible globally
-dbConfig = {    
+dbConfig = {
   user: 'sa',
   password: '304#sa#pw',
-  server: 'localhost', 
+  server: 'localhost',
   database: 'orders',
+<<<<<<< HEAD
     options:{
   enableArithAbort: true,
   encrypt: true
     }
 }
+=======
+};
+>>>>>>> d8e93e29cfee8e162b16f9ff7b04a8ea44b0f817
 
 // Setting up the session.
-// This uses MemoryStorage which is not
-// recommended for production use.
-app.use(session({
-  secret: 'COSC 304 Rules!',
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    httpOnly: false,
-    secure: false,
-    maxAge: 60000,
-  }
-}))
+// This uses MemoryStorage which is not recommended for production use.
+app.use(
+  session({
+    secret: 'COSC 304 Rules!',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      httpOnly: false,
+      secure: false,
+      maxAge: 60000,
+    },
+  })
+);
 
 // Setting up the rendering engine
 app.engine('handlebars', exphbs());
@@ -56,9 +65,9 @@ app.use('/order', order);
 // Rendering the main page
 app.get('/', function (req, res) {
   res.render('index', {
-    title: "YOUR NAME Grocery Main Page"
+    title: 'YOUR NAME Grocery Main Page',
   });
-})
+});
 
 // Starting our Express app
-app.listen(3000)
+app.listen(3000);

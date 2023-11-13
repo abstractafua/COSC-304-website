@@ -13,7 +13,7 @@ router.get('/', function(req, res, next) {
      Use it to build a query and print out the results. **/
 
     res.setHeader('Content-Type', 'text/html');
-    res.write("<title>MY NAME Grocery</title>")
+    res.write("<title>YOUR NAME Grocery</title>")
 
     res.write("<h1>Search for the products you want to buy: </h1>")
 
