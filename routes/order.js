@@ -8,10 +8,12 @@ router.get('/', function(req, res, next) {
     res.write("<title>YOUR NAME Grocery Order Processing</title>");
 
     let productList = false;
+
     if (req.session.productList && req.session.productList.length > 0) {
         productList = req.session.productList;
     }
 
+    
     /**
     Determine if valid customer id was entered
     Determine if there are products in the shopping cart

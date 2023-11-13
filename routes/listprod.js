@@ -15,35 +15,35 @@ router.get('/', function(req, res, next) {
      res.write('</form>');
 
      res.write("<h2>All Products</h2>")
-     res.write("<table><tr><th></th><th>Product Name</th><th>Price</th></tr>");
-
+     
 
     // Get the product name to search for
     let name = req.query.productName; 
     /** $name now contains the search string the user entered
      Use it to build a query and print out the results. **/
 
-     let sqlQ1="SELECT product.productName as pname, product.productPrice as price"
-     +  "FROM product JOIN orderproduct ON product.productId = orderproduct.productId"
+     let sqlQ1= "SELECT product.productName, product.productPrice as price FROM product"
 
      let sqlQ12 ="SELECT product.productName as pname, productPrice as price"
      +  "FROM product JOIN orderproduct ON product.productId = orderproduct.productId" + 
-        "WHERE pname = ? ";
+        "WHERE pname = @pname ";
         
 
         (async function(){ 
             try{
 
+                res.write("<table><tr><th></th><th>Product Name</th><th>Price</th></tr>");
                 let pool = await sql.connect(dbConfig); 
                 let results = await pool.request().query(sqlQ1);
-                
 
                 for (let i = 0; i < results.recordset.length; i++) {
                     let result = results.recordset[i];
-                    res.write("<tr><td> Add to Cart </td>"+ "<td>" + result.pname + "</td><td>" + $ + result.price.toFixed(2) + "</td></tr>");
+                    let productName = JSON.stringify(result.productName)
+                 //   console.log(result);
+                    res.write("<tr><td>Add to Cart</td><td>" + productName + "</td><td>" + '$' + result.price.toFixed(2) + "</td></tr>");
                 }
-
                 res.write("</table>");
+
             }catch(err){
                 console.dir(err);
             res.write(JSON.stringify(err));
@@ -51,10 +51,6 @@ router.get('/', function(req, res, next) {
 
 
             }})();
-
-
-
-     
 
     /** Create and validate connection **/
 
@@ -71,7 +67,7 @@ router.get('/', function(req, res, next) {
         num = num.toFixed(2);
     **/
 
-    res.end();
+ //   res.end();
 });
 
 module.exports = router;
