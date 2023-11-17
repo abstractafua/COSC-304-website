@@ -1,12 +1,5 @@
-<<<<<<< HEAD
-USE orders;
-=======
-CREATE DATABASE orders;
-go
 USE orders;
 
-
->>>>>>> d8e93e29cfee8e162b16f9ff7b04a8ea44b0f817
 
 CREATE TABLE customer (
     customerId          INT IDENTITY,

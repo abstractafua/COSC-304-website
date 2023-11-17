@@ -15,26 +15,6 @@ services:
                     - cosc304_node
         ports:
             - 80:3000
-    cosc304-mysql:
-        image: mysql:8.0
-        container_name: cosc304-mysql
-        restart: always
-        environment:
-            MYSQL_DATABASE: 'testuser'
-            MYSQL_USER: 'testuser'
-            MYSQL_PASSWORD: '304testpw'            
-            MYSQL_ROOT_PASSWORD: '304rootpw'
-        ports:
-            - '3306:3306'
-        expose:
-            - '3306'   
-        volumes:
-            - mysql-db:/var/lib/mysql
-            - ./ddl:/docker-entrypoint-initdb.d
-        networks:
-            network304:
-                aliases:
-                    - cosc304_mysql
     cosc304-sqlserver:
         image: mcr.microsoft.com/mssql/server:2019-latest
         container_name: cosc304-sqlserver

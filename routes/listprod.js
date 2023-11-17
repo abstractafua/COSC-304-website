@@ -1,8 +1,12 @@
 const express = require('express');
+const req = require('express/lib/request');
+const res = require('express/lib/response');
 const router = express.Router();
 const sql = require('mssql');
 
-let productQuery = require('./EmpProjQuery');
+//let productQuery = require('./EmpProjQuery');
+router.use("/listprod", list)
+
 
 router.get('/', function(req, res, next) {
     // Get the product name to search for
@@ -15,9 +19,9 @@ router.get('/', function(req, res, next) {
     res.setHeader('Content-Type', 'text/html');
     res.write("<title>YOUR NAME Grocery</title>")
 
-    res.write("<h1>Search for the products you want to buy: </h1>")
+    res.write("<h1> Search for the products you want to buy: </h1>")
 
-     res.write('<form method="get" action="productQuery">');
+     res.write('<form method="get" action="/listprod>');
      res.write('Product Name: <input type="text" name="productName" size="25">');
      res.write('<input type="submit" value="Submit">');
      res.write('<input type="reset" value="Reset"> (Leave blank for all products)');
@@ -26,7 +30,7 @@ router.get('/', function(req, res, next) {
      res.write("<h2>All Products</h2>")
     
     
-     let sqlQ1= "SELECT product.productName, product.productPrice as price FROM product";
+     let sqlQ1="SELECT product.productName, product.productPrice as price FROM product";
 
      if (name){
         name = "%" + req.query.productName + "%";
@@ -57,8 +61,6 @@ router.get('/', function(req, res, next) {
                 console.dir(err);
             res.write(JSON.stringify(err));
             res.end();
-
-
             }})();
 
     /** Create and validate connection **/
@@ -75,7 +77,6 @@ router.get('/', function(req, res, next) {
         let num = 2.89999;
         num = num.toFixed(2);
     **/
-
  //   res.end();
 });
 
