@@ -22,13 +22,7 @@ dbConfig = {
   password: '304#sa#pw',
   server: 'localhost',
   database: 'orders',
-    options:{
-  enableArithAbort: true,
-  encrypt: true
-    }
-}
-
-
+};
 
 // Setting up the session.
 // This uses MemoryStorage which is not recommended for production use.

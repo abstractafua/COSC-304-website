@@ -80,5 +80,4 @@ Useful code for formatting currency:
 // let sqlQuery = "SELECT ordersummary.orderId,orderDate,customerId,customerName FROM ordersummary JOIN orderproduct ON orderSummary.orderId=orderproduct.orderId";
 // let totalAmount = false;
 // if(req.query.totalAmount){
-
 // }
