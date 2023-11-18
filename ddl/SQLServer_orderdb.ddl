@@ -1,4 +1,7 @@
+CREATE table orders;
+go
 USE orders;
+go
 
 
 CREATE TABLE customer (

@@ -8,12 +8,48 @@ router.get('/', function(req, res, next) {
     res.write("<title>YOUR NAME Grocery Order Processing</title>");
 
     let productList = false;
-
     if (req.session.productList && req.session.productList.length > 0) {
         productList = req.session.productList;
-    }
 
+        (async function() {
+            try {
+               if(req.session.customerID){
+                let pool = await sql.connect(dbConfig);
+                for (let i = 0; i<productList.length; i++)
+                {
+                    product = productList[i];
+                    if(!product){
+                    continue
+                    }
+
+                    sqlQuery = "INSERT INTO OrderedProduct OUTPUT INSERTED.orderId VALUES(?,?,?,?)";
+                    let result = await pool.request()
+                        .input(product.id, product.name, product.price, product.quantity, product.price)
+                        .query(sqlQuery);
+                }
+                let sqlQuery = "SELECT ordersummary.orderID,ordersummary.orderDate, customer.customerId, customer.firstName, cutsomer.lastName, ordersummary.totalAmount" +
+                "FROM ordersummary O JOIN customer C ON O.customerID=C.customerID";
+
+                    let results = await pool.request().query(sqlQuery);
     
+                res.write("<table><tr><th>Order ID</th><th>Order Date</th><th>Customer ID</th><th>Customer Name</th><th>Total Amount</th></tr>");
+                
+               }
+               else{
+               
+               }
+                res.end();
+            } catch(err) {
+                console.dir(err);
+                res.write(err.toString());
+            }
+            res.end();
+        })();
+    }
+    else{
+        res.write("<h1>Your customer ID is incorrect</h1>")
+    }
+    module.exports = router;
     /**
     Determine if valid customer id was entered
     Determine if there are products in the shopping cart
@@ -54,8 +90,5 @@ router.get('/', function(req, res, next) {
     /** Print out order summary **/
 
     /** Clear session/cart **/
-
-    res.end();
+res.end();
 });
-
-module.exports = router;

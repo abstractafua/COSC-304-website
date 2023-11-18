@@ -1,6 +1,4 @@
 const express = require('express');
-const req = require('express/lib/request');
-const res = require('express/lib/response');
 const router = express.Router();
 const sql = require('mssql');
 
@@ -81,6 +79,8 @@ router.get('/', function(req, res, next) {
                 console.dir(err);
             res.write(JSON.stringify(err));
             res.end();
+
+
             }})();
 
     /** Create and validate connection **/
@@ -101,4 +101,5 @@ router.get('/', function(req, res, next) {
  
 });
 module.exports = router;
+
 
