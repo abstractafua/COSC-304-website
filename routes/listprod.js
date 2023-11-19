@@ -6,7 +6,6 @@ router.get('/', function(req, res, next) {
     res.write('<html><head><link rel="stylesheet" href="/css/main.css"></head><body>');
     // Get the product name to search for
     
-
     let name = req.query.productName; 
 
     /** $name now contains the search string the user entered
