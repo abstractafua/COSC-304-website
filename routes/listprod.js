@@ -7,7 +7,11 @@ router.get('/', function (req, res, next) {
     // Get the product name to search for
 
 
+
     let name = req.query.productName;
+    
+    let name = req.query.productName;
+ 
 
     /** $name now contains the search string the user entered
      Use it to build a query and print out the results. **/

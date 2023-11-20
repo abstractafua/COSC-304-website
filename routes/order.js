@@ -7,11 +7,19 @@ router.get('/', function (req, res, next) {
     res.setHeader('Content-Type', 'text/html');
     res.write("<title>YOUR NAME Grocery Order Processing</title>");
 
+    console.log("Hello");
+
+    //get user entered ID
+    let iD = req.query.customerId;
+    let SQL1 = "SELECT * FROM customer WHERE customerID = ?";
+
+    //check products have been added to cart
     let productList = false;
     let sqlQuery = "SELECT customerId FROM customer";
 
     if (req.session.productList && req.session.productList.length > 0) {
         productList = req.session.productList;
+
         customerId = req.query.customerId;
 
         (async function () {
@@ -104,10 +112,61 @@ router.get('/', function (req, res, next) {
 
 
             catch (err) {
+              
+    } else { //let user know cart is empty
+        res.write("<h1>Your shopping cart is empty!.</h1>")
+    }
+
+    console.log(iD);
+
+    (async function () {
+        try {
+            //check iD has been entered
+            if (iD) {
+                let pool = await sql.connect(dbConfig);
+                console.log("Database connected")
+                results = await pool.request().input('customerID', sql.Int, iD).query(SQL1);
+            }
+            else { //let user know iD is blank
+                res.write("<h1>Invalid customer id. Go back to the previous page and try again.</h1>")
+            }
+            console.log(results[0]);
+            if (results) { //if a customer iD record was found
+                let pool = await sql.connect(dbConfig);
+                console.log("Database connected")
+
+                //add items to ordered
+                SQL2 = "INSERT INTO orderSummary OUTPUT INSERTED.orderId VALUES(?,?,?)";
+
+                let total = res.total.toFixed(2);
+
+                let result = await pool.request()
+                    .input(iD, new Date(), total)
+                    .query(SQL2);
+
+                let orderId = result.recordset[0].orderId; //auto generated order key 
+
+
+                for (let i = 0; i < productList.length; i++) {
+                    product = productList[i];
+                    if (!product) {
+                        continue
+                    } else {
+                        SQL3 = "INSERT INTO OrderedProduct OUTPUT INSERTED.orderId VALUES(?,?,?,?)";
+                        let result = await pool.request()
+                            .input(product.id, product.name, product.price, product.quantity)
+                            .query(SQL3);
+                    }
+                }
+            }else{
+
+            } }catch (err) {
+
                 console.dir(err);
                 res.write(err.toString());
                 res.end();
             }
+
 
         })();
     }
@@ -121,9 +180,24 @@ router.get('/', function (req, res, next) {
     If either are not true, display an error message
     **/
 
-    /** Make connection and validate **/
+            res.end();
 
-    /** Save order information to database**/
+
+        });
+
+    });
+        
+        
+    
+
+module.exports = router;
+
+//                     let result = await pool.request()
+//                         .input(product.id, product.name, product.price, product.quantity, product.price)
+//                         .query(sqlQuery);
+//                 }
+//                 let sqlQuery = "SELECT ordersummary.orderID,ordersummary.orderDate, customer.customerId, customer.firstName, cutsomer.lastName, ordersummary.totalAmount" +
+//                 "FROM ordersummary O JOIN customer C ON O.customerID=C.customerID";
 
 
     /**
@@ -136,25 +210,71 @@ router.get('/', function (req, res, next) {
     let orderId = result.recordset[0].orderId;
     **/
 
-    /** Insert each item into OrderedProduct table using OrderId from previous INSERT **/
+//                     let results = await pool.request().query(sqlQuery);
 
-    /** Update total amount for order record **/
 
-    /** For each entry in the productList is an array with key values: id, name, quantity, price **/
+//                 res.write("<table><tr><th>Order ID</th><th>Order Date</th><th>Customer ID</th><th>Customer Name</th><th>Total Amount</th></tr>");
 
-    /**
-        for (let i = 0; i < productList.length; i++) {
-            let product = products[i];
-            if (!product) {
-                continue;
-            }
-            // Use product.id, product.name, product.quantity, and product.price here
+//                }
+//                else{
+
+//                }
+//                 res.end();
+//             } catch(err) {
+//                 console.dir(err);
+//                 res.write(err.toString());
+//             }
+//             res.end();
+//         })();
+//     }
+//     else{
+//         res.write("<h1>Your customer ID is incorrect</h1>")
+//     }
+
+/**
+Determine if valid customer id was entered
+Determine if there are products in the shopping cart
+If either are not true, display an error message
+**/
+
+/** Make connection and validate **/
+
+/** Save order information to database**/
+
+
+/**
+// Use retrieval of auto-generated keys.
+sqlQuery = "INSERT INTO <TABLE> OUTPUT INSERTED.orderId VALUES( ... )";
+let result = await pool.request()
+    .input(...)
+    .query(sqlQuery);
+// Catch errors generated by the query
+let orderId = result.recordset[0].orderId;
+**/
+
+/** Insert each item into OrderedProduct table using OrderId from previous INSERT **/
+
+/** Update total amount for order record **/
+
+/** For each entry in the productList is an array with key values: id, name, quantity, price **/
+
+/**
+    for (let i = 0; i < productList.length; i++) {
+        let product = products[i];
+        if (!product) {
+            continue;
         }
-    **/
+        // Use product.id, product.name, product.quantity, and product.price here
+    }
+**/
 
-    /** Print out order summary **/
+/** Print out order summary **/
+
 
     /** Clear session/cart **/
     res.end();
 });
 module.exports = router;
+
+/** Clear session/cart **/
+
