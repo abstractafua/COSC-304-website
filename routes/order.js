@@ -15,24 +15,33 @@ router.get('/', function (req, res, next) {
 
     //check products have been added to cart
     let productList = false;
+    let results=false;
     let sqlQuery = "SELECT customerId FROM customer";
 
     if (req.session.productList && req.session.productList.length > 0) {
         productList = req.session.productList;
 
         customerId = req.query.customerId;
-
+        res.write("<h1>Your Order Summary</h1>");
         (async function () {
             try {
 
                 let pool = await sql.connect(dbConfig);
                 if (customerId) { //checking if the user's customer id exists
                     sqlQuery = "SELECT customerId,firstName,lastName,address,city,state,postalCode,country FROM customer WHERE customerId = @customerId";
-                    let results = await pool.request().input('customerId', sql.Int, customerId).query(sqlQuery);
-                    if (results.recordset.length == 0) { //if the resultset does not return a customer id
+                    try{
+                     results = await pool.request().input('customerId', sql.Int, customerId).query(sqlQuery);
+                    }
+                    catch(err){
                         res.write("<h3>Customer Id not found</h3>");
+                        res.end();
+                       return;
+                    }if (results.recordset.length == 0) { //if the resultset does not return a customer id
+                        res.write("<h3>Customer Id not found</h3>");
+                        
                     }
                     else {// if the result set returns a customer id
+                          res.write("<table><thead><tr><th>Product Id</th><th>Product Name</th><th>Quantity</th><th>Price</th><th>Subtotal</th></tr></thead>");
                         let resultCust= results.recordset[0];
                         let firstName=resultCust.firstName;
                         let surname=resultCust.lastName;
@@ -59,20 +68,21 @@ router.get('/', function (req, res, next) {
 
                                 let resultOrder= result.recordset[0];
                                 let orderId=resultOrder.orderId;
-
-                                res.write("<h1>Your Order Summary</h1>");
-                                res.write("<table><thead><tr><th>Product Id</th><th>Product Name</th><th>Quantity</th><th>Price</th><th>Subtotal</th></tr></thead>");
                                 for (let i = 0; i < productList.length; i++) {
                                     product = productList[i];
                                     if (!product) { //checking if the product exists??
+                                        res.write("<h1>Your shopping cart is empty</h1>")
                                         continue
                                     }
 
                                     let productId= product.id;
                                     let productQuantity= product.quantity;
                                     let productPrice=product.price;
+                                    let subtotal= productQuantity*productPrice;
+
                                     //show the client their products
-                                    res.write("<tr><td>"+productId+"</td><td>"+product.name+"</td><td>"+productQuantity+"</td><td>"+productPrice+"</td><td>"+productQuantity*productPrice+"</td></tr>");
+                                    res.write("<tr><td>"+productId+"</td><td>"+product.name+"</td><td>"+productQuantity+"</td><td>$"+productPrice+"</td><td>$"+subtotal.toFixed(2)+"</td></tr>");
+                                    
                                     //insert the products ordered by the customer
                                     sqlQuery="INSERT INTO orderproduct OUTPUT INSERTED.orderId VALUES(@a0,@a1,@a2,@a3)";
                                      result= await pool.request()
@@ -91,22 +101,27 @@ router.get('/', function (req, res, next) {
                         .input('a1',sql.Int,customerId)
                         .query(sqlQuery);
 
-                        res.write("<tr><td colspan='4' align='right'><b>Order Total</b></td></tr>");
-                        res.write("<td align='right'>"+total+"</td></tr>");
+                        res.write("<tr><td colspan='4' align='right'><b>Order Total</b></td>");
+                        res.write("<td>$"+total.toFixed(2)+"</td></tr>");
                         res.write("</table>");
 
                         res.write("<h1>Order completed.  Will be shipped soon...</h1>");
-                        res.write("<h1>Your order reference number is: </h1>"+orderId);
-                        res.write("<h1>Shipping to customer: "+ customerId+" Name: "+firstName+surname+"</h1>");
-
-
+                        res.write("<h1>Your order reference number is: "+orderId)+"</h1>";
+                        res.write("<h1>Shipping to customer: "+ customerId+" Name: "+firstName+" "+surname+"</h1>");
                     }
-
+                    req.session.destroy();
                 }
                 else {
                     res.write("<h1>Your customer ID is incorrect</h1>")
                 }
+               
+                // }
+                //  sqlQuery = "SELECT ordersummary.orderID,ordersummary.orderDate, customer.customerId, customer.firstName, cutsomer.lastName, ordersummary.totalAmount" +
+                // "FROM ordersummary O JOIN customer C ON O.customerID=C.customerID";
 
+                //     let results = await pool.request().query(sqlQuery);
+
+                // res.write("<table><tr><th>Order ID</th><th>Order Date</th><th>Customer ID</th><th>Customer Name</th><th>Total Amount</th></tr>");
                 res.end();
             }
 
@@ -163,6 +178,7 @@ router.get('/', function (req, res, next) {
             } }catch (err) {
 
                 console.dir(err);
+                
                 res.write(err.toString());
                 res.end();
             }
@@ -170,9 +186,14 @@ router.get('/', function (req, res, next) {
 
         })();
     }
-    // else{
-    //     res.write("<h1>Your customer ID is incorrect</h1>")
-    // }
+    else if(!req.session.productList){
+        res.write("<h1>Your shopping cart is empty!</h1>");
+        res.end();
+    }
+    else{
+        res.write("<h1>Invalid customer id. Go back to the previous page and try again.</h1>");
+        res.end();
+    }
     // module.exports = router;
     /**
     Determine if valid customer id was entered
@@ -272,7 +293,6 @@ let orderId = result.recordset[0].orderId;
 
 
     /** Clear session/cart **/
-    res.end();
 });
 module.exports = router;
 
