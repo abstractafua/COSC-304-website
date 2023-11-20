@@ -1,6 +1,8 @@
 * {
     /* Change your font family */
     font-family: sans-serif;
+    text-align: center;
+    color: #009879;
 }
 
 .content-table {
@@ -41,3 +43,4 @@
     font-weight: bold;
     color: #009879;
 }
+

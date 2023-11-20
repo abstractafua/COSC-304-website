@@ -5,7 +5,7 @@ const moment = require('moment');
 
 router.get('/', function (req, res, next) {
     res.write("<title>YOUR NAME Grocery Order Processing</title>");
-
+    res.write('<html><head><link rel="stylesheet" href="/css/main.css"></head><body>');
     let productList = false;
     let results=false;
     let sqlQuery = "SELECT customerId FROM customer";
@@ -149,7 +149,21 @@ router.get('/', function (req, res, next) {
 
     /** Make connection and validate **/
 
+
     /** Save order information to database**/
+    });
+          
+    
+
+module.exports = router;
+
+//                     let result = await pool.request()
+//                         .input(product.id, product.name, product.price, product.quantity, product.price)
+//                         .query(sqlQuery);
+//                 }
+//                 let sqlQuery = "SELECT ordersummary.orderID,ordersummary.orderDate, customer.customerId, customer.firstName, cutsomer.lastName, ordersummary.totalAmount" +
+//                 "FROM ordersummary O JOIN customer C ON O.customerID=C.customerID";
+
 
 
     /**

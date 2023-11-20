@@ -4,6 +4,7 @@ const router = express.Router();
 router.get('/', function(req, res, next) {
     let productList = false;
     res.setHeader('Content-Type', 'text/html');
+    res.write('<html><head><link rel="stylesheet" href="/css/main.css"></head><body>');
     res.write("<title>Your Shopping Cart</title>");
 
 
