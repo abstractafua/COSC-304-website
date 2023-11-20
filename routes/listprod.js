@@ -44,7 +44,7 @@ router.get('/', function (req, res, next) {
     }
 
 
-    (async function () {
+    (async function() {
         try {
             res.write("<table class='content-table'><thead><tr><th></th><th>Product Name</th><th>Category</th><th>Price</th></tr></thead>");
 

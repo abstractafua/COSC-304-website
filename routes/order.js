@@ -4,12 +4,16 @@ const sql = require('mssql');
 const moment = require('moment');
 
 router.get('/', function (req, res, next) {
-    res.setHeader('Content-Type', 'text/html');
     res.write("<title>YOUR NAME Grocery Order Processing</title>");
 
     let productList = false;
     let results=false;
     let sqlQuery = "SELECT customerId FROM customer";
+
+    if(req.session.validation == false){
+         res.write("<h1> The ID or password you entered was incorrect. Please go back and try again.</h1>");
+         return res.end();
+    }
 
     if (req.session.productList && req.session.productList.length > 0) {
         productList = req.session.productList;
@@ -17,7 +21,6 @@ router.get('/', function (req, res, next) {
         res.write("<h1>Your Order Summary</h1>");
         (async function () {
             try {
-
                 let pool = await sql.connect(dbConfig);
                 if (customerId) { //checking if the user's customer id exists
                     sqlQuery = "SELECT customerId,firstName,lastName,address,city,state,postalCode,country FROM customer WHERE customerId = @customerId";
@@ -63,7 +66,7 @@ router.get('/', function (req, res, next) {
                                 for (let i = 0; i < productList.length; i++) {
                                     product = productList[i];
                                     if (!product) { //checking if the product exists??
-                                        res.write("<h1>Your shopping cart is empty</h1>")
+                                     //   res.write("<h1>Your shopping cart is empty</h1>")
                                         continue
                                     }
 
@@ -101,7 +104,6 @@ router.get('/', function (req, res, next) {
                         res.write("<h1>Your order reference number is: "+orderId)+"</h1>";
                         res.write("<h1>Shipping to customer: "+ customerId+" Name: "+firstName+" "+surname+"</h1>");
                     }
-                    req.session.destroy();
                 }
                 else {
                     res.write("<h1>Your customer ID is incorrect</h1>")
@@ -115,18 +117,20 @@ router.get('/', function (req, res, next) {
 
                 // res.write("<table><tr><th>Order ID</th><th>Order Date</th><th>Customer ID</th><th>Customer Name</th><th>Total Amount</th></tr>");
                 res.end();
-            }
-
-
-            catch (err) {
+            } catch (err) {
                 console.dir(err);
                 
                 res.write(err.toString());
                 res.end();
             }
+             finally{
+                req.session.destroy();
+             
+             }
 
         })();
     }
+
     else if(!req.session.productList){
         res.write("<h1>Your shopping cart is empty!</h1>");
         res.end();
@@ -135,6 +139,7 @@ router.get('/', function (req, res, next) {
         res.write("<h1>Invalid customer id. Go back to the previous page and try again.</h1>");
         res.end();
     }
+    
     // module.exports = router;
     /**
     Determine if valid customer id was entered
@@ -190,5 +195,4 @@ module.exports = router;
     /** Print out order summary **/
 
     /** Clear session/cart **/
-});
-module.exports = router;
+
