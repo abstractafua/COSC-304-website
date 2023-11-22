@@ -26,6 +26,15 @@ async function validateLogin(req) {
     let authenticatedUser =  await (async function() {
         try {
             let pool = await sql.connect(dbConfig);
+            let sqlQuery="SELECT userid FROM customer WHERE userid=@user AND password=@pass";
+            let results=await pool.request().input('user',sql.VarChar,username)
+            .input('pass',sql.VarChar,password)
+            .query(sqlQuery);
+            
+            if(results.recordset.length>0){
+                let result=results.recordset[0];
+                return result.userid;
+            }
 
 	// TODO: Check if userId and password match some customer account. 
 	// If so, set authenticatedUser to be the username.

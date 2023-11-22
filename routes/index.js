@@ -6,10 +6,16 @@ router.get('/', function (req, res) {
     let username = false;
     
     // TODO: Display user name that is logged in (or nothing if not logged in)	
+    if (req.session.authenticatedUser) {
+        console.log("here");
+        username = req.session.username;
+    }
+    console.log(req.session.authenticatedUser);
     res.render('index', {
-        title: "YOUR NAME Grocery Main Page"
+        title: "YOUR NAME Grocery Main Page",
         // HINT: Look at the /views/index.handlebars file
         // to get an idea of how the index page is being rendered
+        username:username
     });
 })
 
