@@ -4,7 +4,7 @@ const sql = require('mssql');
 
 router.get('/', async function (req, res, next) {
     res.write('<html><head><link rel="stylesheet" href="/css/main.css"></head><body>');
-   // res.setHeader('Content-Type', 'text/html');
+  //  res.setHeader('Content-Type', 'text/html');
     res.write("<title>Grocery CheckOut Line</title>");
     res.write("<h1>Enter your customer id and Password to complete the transaction:</h1>");
     res.write('<form id="myForm" method="get" action="/order">');

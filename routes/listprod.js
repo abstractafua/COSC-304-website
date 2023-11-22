@@ -33,9 +33,6 @@ router.get('/', function (req, res, next) {
    
    
 
-
-
-
     let sqlQ1 = "SELECT product.productId, product.productName, product.productPrice as price, category.categoryName FROM product JOIN category ON product.categoryId = category.categoryId";
     let category="SELECT DISTINCT categoryName FROM category";
 
@@ -46,8 +43,7 @@ router.get('/', function (req, res, next) {
 
     // }
 
-
-    (async function() {
+    (async function () {
         try {
             res.write(" Filter: <select name='category' id='category'>");
             let pool = await sql.connect(dbConfig);
@@ -69,9 +65,14 @@ router.get('/', function (req, res, next) {
             console.log(name);
             
             console.log(selectedCategory && name);
-            if (selectedCategory &&name) {
+          if (selectedCategory &&name) {
                 console.log("I entered here");
-                sqlQ1 = `SELECT product.productId, product.productName, product.productPrice as price, category.categoryName FROM product JOIN category ON product.categoryId = category.categoryId WHERE categoryName= @categoryname AND product.productName LIKE @name `;
+                if(selectedCategory=='All'){
+                    sqlQ1 = `SELECT product.productId, product.productName, product.productPrice as price, category.categoryName FROM product JOIN category ON product.categoryId = category.categoryId WHERE product.productName LIKE @name `;
+                }
+                else{
+                    sqlQ1 = `SELECT product.productId, product.productName, product.productPrice as price, category.categoryName FROM product JOIN category ON product.categoryId = category.categoryId WHERE categoryName= @categoryname AND product.productName LIKE @name `;
+                }
                 results = await pool.request().input('categoryname', sql.VarChar, selectedCategory).input('name', sql.VarChar, name).query(sqlQ1);
             }
             else{
@@ -101,7 +102,7 @@ router.get('/', function (req, res, next) {
                 let price = result.price.toFixed(2);
                 
 
-                res.write(`<tr><td><a href="addcart?id=${result.productId}&name=${encodeURIComponent(productName)}&price=${price}">Add to Cart</a></td><td>${productName}</td><td>${categoryName}</td><td>${result.price.toFixed(2)}</td></tr>`);
+                res.write(`<tr><td><a href="addcart?id=${result.productId}&name=${encodeURIComponent(productName)}&price=${price}">Add to Cart</a></td><td><a href="product?id=${result.productId}">${productName}</a></td><td>${categoryName}</td><td>${result.price.toFixed(2)}</td></tr>`);
             }
 
 
@@ -135,5 +136,7 @@ router.get('/', function (req, res, next) {
 
 });
 module.exports = router;
+
+
 
 
