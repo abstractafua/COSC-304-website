@@ -13,6 +13,9 @@
     border-radius: 5px 5px 0 0;
     overflow: hidden;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    align-content: center;
+    align-self: center;
+    align-items: center;
 }
 
 .content-table thead tr {
