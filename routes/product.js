@@ -4,7 +4,8 @@ const sql = require('mssql');
 const fs = require('fs');
 
 router.get('/', function(req, res, next) {
-    res.setHeader('Content-Type', 'text/html');
+    res.write('<html><head><link rel="stylesheet" href="/css/main.css"></head><body>');
+    // res.setHeader('Content-Type', 'text/html');
     (async function() {
         let productId = req.query.id
         let sqlQuery="SELECT productName,productPrice from product WHERE productId= @productId"
@@ -37,6 +38,9 @@ router.get('/', function(req, res, next) {
         }
     }
     res.write(`<img src="displayImage?id=${productId}">`); 
+    res.write(`<table><tr><th>Id</th><td>${productId}</td></tr>`);
+    res.write(`<tr><th>Price</th><td>${productPrice}</td></tr>`);
+    res.write(`</table>`)
     //work on getting the image from display image to not show as broken image
 
 	// TODO: Add links to Add to Cart and Continue Shopping
