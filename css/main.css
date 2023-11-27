@@ -22,7 +22,11 @@
     font-weight: bold;
 }
 
-.content-table th,
+.content-table th{
+    color: #ffffff;
+    padding: 12px 15px;
+}
+
 .content-table td {
     padding: 12px 15px;
 }
