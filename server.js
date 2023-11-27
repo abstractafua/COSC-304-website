@@ -37,7 +37,7 @@ dbConfig = {
   database: 'orders',
   options: {
     encrypt: true,
-    enableArithAbort: true
+  enableArithAbort: true
     }
 };
 

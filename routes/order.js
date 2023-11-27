@@ -47,7 +47,7 @@ router.get('/', function (req, res, next) {
                         let country=resultCust.country;
                         
                             let total=0;
-                            console.log(total); //how do I get the total price??
+                            console.log(total); //
                             //add into ordersummary the orders from the customer
                             sqlQuery = "INSERT INTO ordersummary OUTPUT INSERTED.orderId VALUES(@a0,@a1,@a2,@a3,@a4,@a5,@a6,@a7)";
                             let result = await pool.request()

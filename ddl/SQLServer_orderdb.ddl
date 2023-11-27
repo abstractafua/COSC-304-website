@@ -1,5 +1,5 @@
-USE orders;
 
+USE orders;
 
 
 CREATE TABLE customer (
