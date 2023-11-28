@@ -35,7 +35,7 @@ router.get('/', function (req, res, next) {
                 let results2 = await pool.request().input('orderId', sql.Int, orderId).query(query2);
 
                 if (results2.recordset.length > 0) {
-                    res.write("<td colspan='5'><table class='content-table'><tr><th>Product Id</th><th>Quantity</th><th>Price</th></tr>");
+                    res.write("<td colspan='5'><table class='content-table'><thead><tr><th>Product Id</th><th>Quantity</th><th>Price</th></tr></thead>");
 
                     for (let j = 0; j < results2.recordset.length; j++) {
                         let result2 = results2.recordset[j];

@@ -37,7 +37,7 @@ router.get('/', function(req, res, next) {
             }
         }
     }
-    res.write(`<img src="displayImage?id=${productId}">`); 
+    res.write(`<img src="displayImage?id=${productId}" onerror="this.style.display='none'">`); 
     res.write(`<table><tr><th>Id</th><td>${productId}</td></tr>`);
     res.write(`<tr><th>Price</th><td>${productPrice}</td></tr>`);
     res.write(`</table>`)
