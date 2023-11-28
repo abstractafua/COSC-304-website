@@ -57,21 +57,22 @@ router.get('/', function (req, res, next) {
                 let orderItem = orderItemResults.recordset[i];
                 let productId = orderItem.productId;
                 let quantity = orderItem.quantity;
-                // let SQL2 = "SELECT * FROM productInventory WHERE productId = @productId AND warehouseId = 1 AND quantity>@quantity;"
+                let SQL2 = "SELECT * FROM productInventory WHERE productId = @productId AND warehouseId = 1 AND quantity>@quantity;"
                 console.log(quantity);
-                let SQL2="SELECT * FROM productInventory  WHERE productId = @productId AND warehouseId = 1  AND quantity>@quantity";
+                // let SQL2="SELECT * FROM productInventory  WHERE productId = @productId";
                 let warehouse_results = await pool.request().input('productId', sql.Int, productId).input('quantity', sql.Int, quantity).query(SQL2);
                 console.log(warehouse_results);
                 if (warehouse_results.recordset.length > 0) {
                     let warehouseItem = warehouse_results.recordset[0];
                     console.log(warehouseItem);
-                    // let warehouse_inventory = warehouseItem.quantity;
+                    let warehouse_inventory = warehouseItem.quantity;
                     console.log("passed");
 
                     // TODO: If any item does not have sufficient inventory, cancel transaction and rollback. Otherwise, update inventory for each item.
                     if (!warehouseItem) {
-                        await transaction.rollback();
+                        
                         res.write(`<h1>Shipment not done. Insufficient inventory for product id: ${productId}<h1>`);
+                        await transaction.rollback();
                     } else {
 
                         let SQL3 = "UPDATE productinventory SET quantity= quantity -@quantity WHERE productId = @productId AND warehouseId=1";
