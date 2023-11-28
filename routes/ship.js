@@ -5,6 +5,7 @@ const moment = require('moment');
 
 router.get('/', function (req, res, next) {
     res.setHeader('Content-Type', 'text/html');
+    res.write('<html><head><link rel="stylesheet" href="/css/main.css"></head><body>');
 
     console.log("i'm in");
 
@@ -12,106 +13,88 @@ router.get('/', function (req, res, next) {
     let orderId = req.query.orderId;
 
     console.log("order id secured");
-          
-	// // TODO: Check if valid order id
-    // if(orderId==false){
-    //     return;
-    // }
-
-    // (async function() {
-    //     try {
-    //         let pool = await sql.connect(dbConfig);
-
-    //        // TODO: Start a transaction
-    //        let transaction = await sql.beginTransaction(); //can i do this???
-
-	//    	// TODO: Retrieve all items in order with given id
-    //     //need ordersummary.orderDate, ordersummary.orderId, productId,productName,orderproduct.quantity,orderproduct.price,
-    //             SQL = "SELECT * FROM orderproduct WHERE orderId=@orderId";
-    //             orderItemResults = await pool.request().input('orderId', sql.Int, orderId).query(SQL);
-
-	//    	// TODO: Create a new shipment record.
-    //          //   SQL2 = "INSERT INTO shipment(shipmentDate,shipmentDesc,warehouseId) VALUES (@shipDate,@shipDesc,@warehouseId)";
-            
-    //             let shipmentDate = new sql.DateTime();
-    //             let shipmentDesc = "Customer Order";
-    //             let warehouseId = 1;
-
-    //             sqlQuery = "INSERT INTO shipment VALUES(@a0,@a1,@a2,@a3)";
-                
-    //             await pool.request()
-    //            .input('a0', sql.DateTime, shipmentDate)
-    //            .input('a1',sql.VarChar, shipmentDesc)
-    //            .input('a2',sql.Int, warehouseId)
-    //            .query(sqlQuery);
-
-    //          //   ship_results = await pool.request().input('orderId', sql.Int, orderId).query(sqlQuery);
-
-            //    let shipID = ship_results.recordset[0].shipmentId;
 
 
-	//    	// TODO: For each item verify sufficient quantity available in warehouse 1.
-    //                 for(let i =0; i<orderItemResults.length; i++){
+    (async function () {
+        try {
+            let pool = await sql.connect(dbConfig);
+            // // TODO: Check if valid order id
+            SQL1 = "SELECT * FROM ordersummary WHERE orderId = @orderId";
+            let r = await pool.request().input('orderId', sql.Int, orderId).query(SQL1);
 
-    //                         let orderItem = orderItemResults.recordset[i];
-    //                         let productId = orderItem.productId;
-    //                         let quantity = orderItem.quantity;
-                            
-    //                         SQL2 = "SELECT * FROM productinventory WHERE productId = @productId AND warehouseId = 1 AND quantity>@quantity;"
-    //                        let warehouse_results = await pool.request().input(productId).input(quantity).query(SQL2);
+            console.log(r.recordset);
+            if (r.recordset.length == 0) { //if no record of orderId in order summary
 
-    //                         let warehouseItem = warehouse_results.recordset[i];
-    //                         let warehouse_inventory = warehouseItem.quantity;
+                res.write(`<h1>Invalid order id or no items in order.</h1>`)
+                res.end();
+                return;
+            }
 
-    //                          	// TODO: If any item does not have sufficient inventory, cancel transaction and rollback. Otherwise, update inventory for each item.
-    //                         if(!warehouseItem){
-    //                             await transaction.rollack(); 
-    //                             res.write(`Shipment not done. Insufficient inventory for product id: ${productId}`);
-    //                         }else{
+            // TODO: Start a transaction
+            let transaction = new sql.Transaction(pool); //can i do this???
+            await transaction.begin();
 
-    //                             SQL3 = "UPDATE productinventory SET quantity= quantity -@quantity WHERE productId = @productId AND warehouseId=1";
-    //                             await pool.request.input('quantity',sql.Int,quantity).input('productId',sql.Int,productId).query(SQL3);
-                               
-    //                             let current_inventory = warehouse_inventory-quantity;
+            // TODO: Retrieve all items in order with given id
+            //need ordersummary.orderDate, ordersummary.orderId, productId,productName,orderproduct.quantity,orderproduct.price,
+            let SQL = "SELECT * FROM orderproduct WHERE orderId=@orderId";
+            orderItemResults = await pool.request().input('orderId', sql.Int, orderId).query(SQL);
 
-    //                             res.write(`Ordered Product: ${productId} QTY: ${quantity} Previous Inventoy: ${inventory} Current Inventory: ${current_inventory}`);
+            // TODO: Create a new shipment record.
+            //   SQL2 = "INSERT INTO shipment(shipmentDate,shipmentDesc,warehouseId) VALUES (@shipDate,@shipDesc,@warehouseId)";
 
-    //                      
+            let shipmentDate = new Date();
+            let shipmentDesc = "Customer Order";
+            let warehouseId = 1;
+
+            sqlQuery = "INSERT INTO shipment VALUES(@a0,@a1,@a2)";
+
+            await pool.request()
+                .input('a0', sql.DateTime, shipmentDate)
+                .input('a1', sql.VarChar, shipmentDesc)
+                .input('a2', sql.Int, warehouseId)
+                .query(sqlQuery);
+
             // TODO: For each item verify sufficient quantity available in warehouse 1.
             for (let i = 0; i < orderItemResults.recordset.length; i++) {
-                console.log(i);
+
                 let orderItem = orderItemResults.recordset[i];
                 let productId = orderItem.productId;
                 let quantity = orderItem.quantity;
-                let SQL2 = "SELECT * FROM productInventory WHERE productId = @productId AND warehouseId = 1 AND quantity>@quantity;"
-                console.log(quantity);
-                // let SQL2="SELECT * FROM productInventory  WHERE productId = @productId";
+                let SQL2 = "SELECT * FROM productInventory WHERE productId = @productId AND warehouseId = 1";
+               
+
                 let warehouse_results = await pool.request().input('productId', sql.Int, productId).input('quantity', sql.Int, quantity).query(SQL2);
-                console.log(warehouse_results);
-                if (warehouse_results.recordset.length > 0) {
-                    let warehouseItem = warehouse_results.recordset[0];
-                    console.log(warehouseItem);
-                    let warehouse_inventory = warehouseItem.quantity;
-                    console.log("passed");
 
-                    // TODO: If any item does not have sufficient inventory, cancel transaction and rollback. Otherwise, update inventory for each item.
-                    if (!warehouseItem) {
-                        
-                        res.write(`<h1>Shipment not done. Insufficient inventory for product id: ${productId}<h1>`);
-                        await transaction.rollback();
-                    } else {
+                let warehouseItem = warehouse_results.recordset[0];
 
-                        let SQL3 = "UPDATE productinventory SET quantity= quantity -@quantity WHERE productId = @productId AND warehouseId=1";
-                        await pool.request().input('quantity', sql.Int, quantity).input('productId', sql.Int, productId).query(SQL3);
+                let warehouse_inventory = warehouseItem.quantity;
+                console.log("passed");
 
-                        let current_inventory = warehouse_inventory - quantity;
+                // TODO: If any item does not have sufficient inventory, cancel transaction and rollback. Otherwise, update inventory for each item.
+                if (quantity > warehouse_inventory) {
+                    console.log("condition met");
+                    await transaction.rollback();
+                    res.write(`<p1><h3>Shipment not done. Insufficient inventory for product id: ${productId}<h3></p1>`);
+                    res.write(`<h3><a href='/'>Back to Main Page</a></h3>`);
+                    res.end();
+                    return;
+                } else if (!warehouse_inventory) {
 
-                        res.write(`Ordered Product: ${productId} QTY: ${quantity}  Previous Inventory: ${warehouse_inventory} Current Inventory: ${current_inventory}`);
 
-                    }
+                } else {
+
+                    let SQL3 = "UPDATE productinventory SET quantity= quantity - @quantity WHERE productId = @productId AND warehouseId=1";
+                    await pool.request().input('quantity', sql.Int, quantity).input('productId', sql.Int, productId).query(SQL3);
+
+                    let current_inventory = warehouse_inventory - quantity;
+
+                    res.write(`<p><h3>Ordered Product: ${productId} QTY: ${quantity}  Previous Inventory: ${warehouse_inventory} Current Inventory: ${current_inventory}</h3></p>`);
                 }
             }
+
             await transaction.commit();
+            res.write(`<p1><h1>Shipment successfully processed </h1></p1>`);
+            res.write(`<h1><a href='/'>Back to Main Page</a></h1>`);
             res.end();
 
         } catch (err) {
@@ -120,16 +103,6 @@ router.get('/', function (req, res, next) {
             res.end();
         }
     })();
-
-    //                 }	 
-    //                 transaction.commit();  		
- 
-    //     } catch(err) {
-    //         console.dir(err);
-    //         res.write(err + "")
-    //         res.end();
-    //     }
-    // })();
 });
 
 module.exports = router;
