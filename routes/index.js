@@ -8,7 +8,7 @@ router.get('/', function (req, res) {
     // TODO: Display user name that is logged in (or nothing if not logged in)	
     if (req.session.authenticatedUser) {
         console.log("here");
-        username = req.session.username;
+        username = req.session.authenticatedUser;
     }
     console.log(req.session.authenticatedUser);
     res.render('index', {
