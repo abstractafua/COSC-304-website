@@ -1,11 +1,43 @@
-<h1 align="center">Welcome to YOUR NAME Grocery</h1>
-<h2 align="center"><a href="/login">Login</a></h2>
-<h2 align="center"><a href="/listprod">Begin Shopping</a></h2>
-<h2 align="center"><a href="/listorder">List All Orders</a></h2>
-<h2 align="center"><a href="/customer">Customer Info</a></h2>
-<h2 align="center"><a href="/admin">Administrators</a></h2>
-<h2 align="center"><a href="/logout">Log out</a></h2>
-
-{{#if username}}
-    <h3 align="center">Signed in as: {{username}}</h3>
-{{/if}}
+<nav class="navbar bg-body-tertiary fixed top">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+            <img src="/img/logo.png" align= "center" alt="Logo" width="40" height="40" class="d-inline-block align-text-top">
+            Kicks and Flicks!
+            </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Kicks and Flicks!</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/listprod">Begin Shopping</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/listorder">List All Orders</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/customer">Customer Info</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/admin">Administrators</a>
+                    </li>
+                    {{#if username}}
+                    <div class="offcanvas-header">
+                        <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Signed in as {{username}}</h5>
+                        <a class="nav-link active" aria-current="page" href="/logout">Log Out</a>
+                    </div>
+                    {{else}}
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/login">Log In</a>
+                    </li>
+                    {{/if}}
+                </ul>
+            </div>
+        </div>  
+    </div>
+</nav>

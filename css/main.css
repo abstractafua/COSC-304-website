@@ -1,6 +1,6 @@
 * {
     /* Change your font family */
-    font-family: sans-serif;
+    font-family: 'Times New Roman', Times, serif;
     text-align: center;
     color: peru;
 }
@@ -48,4 +48,20 @@
     font-weight: bold;
     color: #009879;
 }
+.info-block{
+    margin: auto;
+    background-color: rgba(255, 255, 255, 0.644);
+    width: 80%;
+    border-radius: 1.2em;
+    margin-bottom: 3em;
+}
+.content{
+    padding: 2em;
+    font-family: 'Courier New', Courier, monospace;
+    text-align: center;
+}
+.bg-success {
+    --bs-bg-opacity: 1;
+    background-color: rgba(var(--bs-success-rgb), var(--bs-bg-opacity)) !important;
+  }
 
