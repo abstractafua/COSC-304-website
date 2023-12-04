@@ -39,13 +39,14 @@ router.get('/', async function (req, res, next) {
     }
     // Ensure to call res.end at the end of the request cycle
 
+    res.end();
+
 });
 
 // router.post('/order',function(req,res,next) {
 //     res.redirect('/order')
 //     res.end();
 // });
-
 
 module.exports = router;
 

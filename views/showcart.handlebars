@@ -1,0 +1,67 @@
+
+<head>
+    <link rel="stylesheet" href="/css/main.css">
+    <title>Your Shopping Cart</title>
+</head>
+
+ <script>
+    function updateQuantity(productId, newQuantity) {
+
+        if (!isNaN(newQuantity)) { //make sure a number is entered
+            // Redirect to the showcart page with updated quantity in the URL
+            window.location = `showcart?updateAmount=` +  newQuantity + `&updateId=` + productId;
+        }
+    }
+</script>
+{{#if product}}
+<body>
+    <div>
+    <form name="form1">
+        <h1>Your Shopping Cart</h1>
+        <table>
+            <tr>
+                <th>Product Id</th>
+                <th>Product Name</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Subtotal</th>
+                <th>Actions</th>
+            </tr>
+
+            {{#each product}}
+            {{#if this}}
+               <tr>
+                            <td>{{this.id}}</td>
+                            <td>{{this.name}}</td>
+                            <td><label>
+                                <input type='number' min='1' step='1' id='newAmount{{this.id}}' value={{this.quantity}}>
+                            </label></td>
+                            <td>${{this.price}}</td>
+                            <td>${{this.subtotal}}</td>
+                            <td><a href='\showcart?delete={{this.id}}'> Remove Item from Cart </a></td>
+                            <td><input type=button onclick="updateQuantity({{this.id}}, document.form1.newAmount{{this.id}}.value)"
+                                     class="btn button-coloured"  value="Update Quantity"></td>
+                        </tr>
+                        {{/if}}
+            {{/each}}
+
+   <h2><a href="listprod">Continue Shopping</a></h2>
+
+     <tr>
+                <td colspan="4" align="right"><b>Order Total</b></td>
+                <td align="right">${{total}}</td>
+            </tr>
+        </table>
+
+        <h2><a href="checkout">Check Out</a></h2>
+  </form>
+</div>
+ {{else}}
+        <h1>Your shopping cart is empty!</h1>
+        <h2><a href="listprod">Continue Shopping</a></h2>
+</body>
+
+ {{/if}}
+
+</html>
+

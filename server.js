@@ -8,7 +8,7 @@ let loadData = require('./routes/loaddata');
 let listOrder = require('./routes/listorder');
 let listProd = require('./routes/listprod');
 let addCart = require('./routes/addcart');
-let showCart = require('./routes/showcart');
+let showCart = require('./routes/showcart2');
 let checkout = require('./routes/checkout');
 let order = require('./routes/order');
 let login = require('./routes/login');
@@ -84,12 +84,14 @@ app.use('/displayImage', displayImage);
 app.use('/customer', customer);
 app.use('/ship', ship);
 
+
+// Starting our Express app
+app.listen(3000);
+
+
 // Rendering the main page
 // app.get('/', function (req, res) {
 //   res.render('index', {
 //     title: 'YOUR NAME Grocery Main Page',
 //   });
 // });
-
-// Starting our Express app
-app.listen(3000);
