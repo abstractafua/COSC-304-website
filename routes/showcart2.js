@@ -4,7 +4,7 @@ const router = express.Router();
 
 router.get('/', function(req, res, next) {
 
-    let total = 0.00;
+    let total = 0;
     
         let updateAmount = false;
         let removeItem = false;
@@ -15,7 +15,7 @@ router.get('/', function(req, res, next) {
             let product = productList[i];
             if (product) {
                 product.subtotal = (product.quantity * product.price).toFixed(2);
-                total += (parseFloat(product.subtotal)).toFixed(2);
+                total = total + (parseFloat(product.subtotal)).toFixed(2);
             }else{
                 continue;
             }
@@ -95,8 +95,6 @@ router.get('/', function(req, res, next) {
     }
     }
         res.render('showcart', {product: productList, total});
-
-    
 
        
 });

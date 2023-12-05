@@ -57,7 +57,17 @@ app.use(
 );
 
 // Setting up the rendering engine
-app.engine('handlebars', exphbs());
+
+
+const handlebarsHelpers = {
+  subtotal: function (price, quantity) {
+    return (price * quantity).toFixed(2);
+  },
+};
+
+app.engine('handlebars', exphbs({
+  helpers: handlebarsHelpers,
+}));
 app.set('view engine', 'handlebars');
 
 // Setting up where static assets should

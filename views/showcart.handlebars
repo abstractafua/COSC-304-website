@@ -6,11 +6,8 @@
 
  <script>
     function updateQuantity(productId, newQuantity) {
-
-        if (!isNaN(newQuantity)) { //make sure a number is entered
             // Redirect to the showcart page with updated quantity in the URL
-            window.location = `showcart?updateAmount=` +  newQuantity + `&updateId=` + productId;
-        }
+         window.location = `showcart?updateAmount=` +  newQuantity + `&updateId=` + productId;
     }
 </script>
 {{#if product}}
@@ -37,7 +34,7 @@
                                 <input type='number' min='1' step='1' id='newAmount{{this.id}}' value={{this.quantity}}>
                             </label></td>
                             <td>${{this.price}}</td>
-                            <td>${{this.subtotal}}</td>
+                            <td>${{subtotal}}</td>
                             <td><a href='\showcart?delete={{this.id}}'> Remove Item from Cart </a></td>
                             <td><input type=button onclick="updateQuantity({{this.id}}, document.form1.newAmount{{this.id}}.value)"
                                      class="btn button-coloured"  value="Update Quantity"></td>
@@ -48,7 +45,7 @@
    <h2><a href="listprod">Continue Shopping</a></h2>
 
      <tr>
-                <td colspan="4" align="right"><b>Order Total</b></td>
+                <td colspan="4" align="left"><b>Order Total</b></td>
                 <td align="right">${{total}}</td>
             </tr>
         </table>
