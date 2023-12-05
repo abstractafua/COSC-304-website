@@ -12,7 +12,7 @@ router.get('/', function (req, res) {
     }
     console.log(req.session.authenticatedUser);
     res.render('index', {
-        title: "Kicks and Flicks!",
+        title: "Kicks!",
         // HINT: Look at the /views/index.handlebars file
         // to get an idea of how the index page is being rendered
         username:username

@@ -64,4 +64,10 @@
     --bs-bg-opacity: 1;
     background-color: rgba(var(--bs-success-rgb), var(--bs-bg-opacity)) !important;
   }
+.body {
+    background-image: url("/img/background.png");
+    height: 100vh;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
 

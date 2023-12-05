@@ -1,43 +1,47 @@
-<nav class="navbar bg-body-tertiary fixed top">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">
-            <img src="/img/logo.png" align= "center" alt="Logo" width="40" height="40" class="d-inline-block align-text-top">
-            Kicks and Flicks!
-            </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
-            <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Kicks and Flicks!</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-            </div>
-            <div class="offcanvas-body">
-                <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/listprod">Begin Shopping</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/listorder">List All Orders</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/customer">Customer Info</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/admin">Administrators</a>
-                    </li>
-                    {{#if username}}
-                    <div class="offcanvas-header">
-                        <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Signed in as {{username}}</h5>
-                        <a class="nav-link active" aria-current="page" href="/logout">Log Out</a>
-                    </div>
-                    {{else}}
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/login">Log In</a>
-                    </li>
-                    {{/if}}
-                </ul>
-            </div>
-        </div>  
+<!-- <div id="carouselExample" class="carousel slide">
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img src="https://wallpapercave.com/wp/wp2971379.jpg" class="d-block w-100" alt="...">
     </div>
-</nav>
+    <div class="carousel-item">
+      <img src="https://media.gq.com/photos/57fc7db7efd8450b0917b398/16:9/w_2580,c_limit/9b9869808e39c646d97412082e045fc88e47fc80.jpg" class="d-block w-100" alt="...">
+    </div>
+    <div class="carousel-item">
+      <img src="https://i.redd.it/wy87qhaefek51.jpg" class="d-block w-100" alt="...">
+    </div>
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div> -->
+<div>
+            <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                    <img src="https://wallpapercave.com/wp/wp2971379.jpg" class="d-block w-100" alt="...">
+                    </div>
+                    <div class="carousel-item">
+                    <img src="https://media.gq.com/photos/57fc7db7efd8450b0917b398/16:9/w_2580,c_limit/9b9869808e39c646d97412082e045fc88e47fc80.jpg" class="d-block w-100" alt="...">
+                    </div>
+                    <div class="carousel-item">
+                    <img src="https://i.redd.it/wy87qhaefek51.jpg" class="d-block w-100" alt="...">
+                    </div>
+                </div>
+               <!-- <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button> -->
+            </div>
+
+
+
+</div>
