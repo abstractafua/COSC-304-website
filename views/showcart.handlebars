@@ -9,6 +9,12 @@
             // Redirect to the showcart page with updated quantity in the URL
          window.location = `showcart?updateAmount=` +  newQuantity + `&updateId=` + productId;
     }
+
+    function removeItem(productId){
+
+        
+
+    }
 </script>
 {{#if product}}
 <body>
@@ -34,7 +40,7 @@
                                 <input type='number' min='1' step='1' id='newAmount{{this.id}}' value={{this.quantity}}>
                             </label></td>
                             <td>${{this.price}}</td>
-                            <td>${{subtotal}}</td>
+                            <td>${{subtotal this.price this.quantity}}</td>
                             <td><a href='\showcart?delete={{this.id}}'> Remove Item from Cart </a></td>
                             <td><input type=button onclick="updateQuantity({{this.id}}, document.form1.newAmount{{this.id}}.value)"
                                      class="btn button-coloured"  value="Update Quantity"></td>
@@ -43,10 +49,9 @@
             {{/each}}
 
    <h2><a href="listprod">Continue Shopping</a></h2>
-
      <tr>
                 <td colspan="4" align="left"><b>Order Total</b></td>
-                <td align="right">${{total}}</td>
+                <td align="left">${{total product}}</td>
             </tr>
         </table>
 

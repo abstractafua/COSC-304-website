@@ -68,6 +68,26 @@ const handlebarsHelpers = {
 app.engine('handlebars', exphbs({
   helpers: handlebarsHelpers,
 }));
+
+let hbs = exphbs.create({});
+
+hbs.handlebars.registerHelper('subtotal', function (price, quantity) {
+    return (quantity * price).toFixed(2)
+})
+
+
+hbs.handlebars.registerHelper('total', function (productList) {
+  let total = 0
+  for (let i = 0; i < productList.length; i++) {
+      let product = productList[i]
+      if (!product) {
+          continue
+      }
+      total = total + product.quantity * product.price
+  }
+  return total.toFixed(2)
+})
+
 app.set('view engine', 'handlebars');
 
 // Setting up where static assets should

@@ -14,12 +14,16 @@ router.get('/', function(req, res, next) {
         for (let i = 0; i < productList.length; i++) {
             let product = productList[i];
             if (product) {
-                product.subtotal = (product.quantity * product.price).toFixed(2);
-                total = total + (parseFloat(product.subtotal)).toFixed(2);
+                product.subtotal = (product.quantity * product.price);
+                total = total + (parseFloat(product.subtotal));
             }else{
                 continue;
             }
+            product.subtotal = product.subtotal.toFixed(2);
         }
+
+
+        total = total.toFixed(2);
 
         
 
@@ -94,7 +98,7 @@ router.get('/', function(req, res, next) {
         }
     }
     }
-        res.render('showcart', {product: productList, total});
+        res.render('showcart', {product: productList});
 
        
 });
