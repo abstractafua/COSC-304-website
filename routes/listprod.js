@@ -53,6 +53,7 @@ router.get('/', async function (req, res, next) {
                             <th></th>
                             <th>Product Name</th>
                             <th>Category</th>
+                            <th>Size</th>
                             <th>Price</th>
                         </tr>
                     </thead>
@@ -86,7 +87,12 @@ router.get('/', async function (req, res, next) {
                     <tr>
                         <td><a href="addcart?id=${result.productId}&name=${encodeURIComponent(productName)}&price=${price}" class="btn btn-success">Add to Cart</a></td>
                         <td><a href="product?id=${result.productId}">${productName}</a></td>
+                        <td>
                         <td>${categoryName}</td>
+                        <td><label>
+                        <input type='string'>
+                    </label>
+                    </td>
                         <td>${price}</td>
                     </tr>`;
             });
@@ -103,6 +109,23 @@ router.get('/', async function (req, res, next) {
                         <td><a href="addcart?id=${result.productId}&name=${encodeURIComponent(productName)}&price=${price}" class="btn btn-success">Add to Cart</a></td>
                         <td><a href="product?id=${result.productId}">${productName}</a></td>
                         <td>${categoryName}</td>
+                        <td><select name="category" class="form-control my-2" id="category">
+                        <option value="3Y"> </option>
+                        <option value="3Y">3Y</option>
+                        <option value="4Y">4Y</option>
+                        <option value="4Y">5Y</option>
+                        <option value="37">37 EU</option>
+                        <option value="38">38 EU</option>
+                        <option value="39">39 EU</option>
+                        <option value="40">40 EU</option>
+                        <option value="41">41 EU</option>
+                        <option value="42">42 EU</option>
+                        <option value="43">43 EU</option>
+                        <option value="44">44 EU</option>
+                        <option value="44">45 EU</option>
+                        </select>
+                        </td>
+                    </label>
                         <td>${price}</td>
                     </tr>`;
             });
