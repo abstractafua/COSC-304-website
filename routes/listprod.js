@@ -2,141 +2,131 @@ const express = require('express');
 const router = express.Router();
 const sql = require('mssql');
 
-router.get('/', function (req, res, next) {
-    res.write('<html><head><link rel="stylesheet" href="/css/main.css"></head><body>');
-    // Get the product name to search for
+router.get('/', async function (req, res, next) {
+    try {
+        // Get the product name to search for
+        let name = req.query.productName;
+        let selectedCategory = req.query.category;
 
+        // Build the main content
+        let content = `
+            <html>
+                <head>
+                    <title>YOUR NAME Grocery</title>
+                    <link rel="stylesheet" href="/css/main.css">
+                    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+                </head>
+                <body>
+                    <div class="container mt-5">
+                        <h1>Search for the products you want to buy</h1>
+                        <script>
+                            function change() {
+                                var newTitle = "Products containing";
+                                var title = document.getElementById('myHeader');
+                                title.innerHTML = newTitle;
+                            }
+                        </script>
+                        
+                        <form method="get" action="/listprod" class="text-center">
+                            Product Name <input type="text" name="productName" class="form-control" size="25">
+                            Filter <select name="category" class="form-control" id="category">
+                                <option value="All">All</option>`;
 
-    let name = req.query.productName;
-    let selectedCategory=req.query.category;
+        let categoryQuery = "SELECT DISTINCT categoryName FROM category";
+        let pool = await sql.connect(dbConfig);
+        let categories = await pool.request().query(categoryQuery);
 
-    /** $name now contains the search string the user entered
-     Use it to build a query and print out the results. **/
+        categories.recordset.forEach(category => {
+            content += `<option value="${category.categoryName}">${category.categoryName}</option>`;
+        });
 
-    // res.setHeader('Content-Type', 'text/html');
-    res.write("<title>YOUR NAME Grocery</title>")
+        content += `</select>
+                    <input type="submit" class="btn btn-primary" value="Submit" onclick="change()">
+                    <input type="reset" class="btn btn-secondary" value="Reset">
+                </form>
+            </div>
+            <div class="container mt-3">
+                <table class="table">
+                    <thead>
+                    <h2 id="myHeader">All Products</h2>
+                        <tr>
+                            <th></th>
+                            <th>Product Name</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>`;
 
-    res.write("<h1>Search for the products you want to buy: </h1>")
-    res.write("<h2 id='myHeader'>All Products</h2>")
-    res.write('<script>');
-    res.write('function change() {');
-    res.write('    var newTitle = "Products containing";');
-    res.write('    var title = document.getElementById(\'myHeader\');');
-    res.write('    title.innerHTML = newTitle;');
-    res.write('}');
-    res.write('</script>')
+        let sqlQ1 = `
+            SELECT product.productId, product.productName, product.productPrice as price, category.categoryName
+            FROM product
+            JOIN category ON product.categoryId = category.categoryId
+        `;
 
-    
-
-    res.write('<form method="get" action="/listprod">');
-    res.write('Product Name: <input type="text" name="productName" size="25">');
-   
-   
-
-    let sqlQ1 = "SELECT product.productId, product.productName, product.productPrice as price, category.categoryName FROM product JOIN category ON product.categoryId = category.categoryId";
-    let category="SELECT DISTINCT categoryName FROM category";
-
-    // if (name) {
-    //     // name = "%" + req.query.productName + "%";
-
-    //     sqlQ1 = `SELECT product.productId, product.productName, product.productPrice as price, category.categoryName FROM product JOIN category ON product.categoryId = category.categoryId WHERE product.productName LIKE @name`;
-
-    // }
-
-    (async function () {
-        try {
-            res.write(" Filter: <select name='category' id='category'>");
-            let pool = await sql.connect(dbConfig);
-            let results = await pool.request().query(category);
-            res.write("<option value='All'>All</option>");
-            for(let i=0;i<results.recordset.length;i++){
-                let result=results.recordset[i];
-                let categoryName=result.categoryName;
-                res.write(`<option value='${categoryName}'>`+categoryName+`</option>`);
+        if (selectedCategory && name) {
+            if (selectedCategory !== 'All') {
+                sqlQ1 += ` WHERE categoryName = @categoryname AND product.productName LIKE @name`;
+            } else {
+                sqlQ1 += ` WHERE product.productName LIKE @name`;
             }
-            res.write("</select>");
-            res.write('<input type="submit" value="Submit" onclick="change()">');
-            res.write('<input type="reset" value="Reset"> (Leave blank for all products)');
-            res.write('</form>');
-            selectedCategory=req.query.category;
-            console.log("name is empty");
-            
-            name = "%" + req.query.productName + "%"
-            console.log(name);
-            
-            console.log(selectedCategory && name);
-          if (selectedCategory &&name) {
-                console.log("I entered here");
-                if(selectedCategory=='All'){
-                    sqlQ1 = `SELECT product.productId, product.productName, product.productPrice as price, category.categoryName FROM product JOIN category ON product.categoryId = category.categoryId WHERE product.productName LIKE @name `;
-                }
-                else{
-                    sqlQ1 = `SELECT product.productId, product.productName, product.productPrice as price, category.categoryName FROM product JOIN category ON product.categoryId = category.categoryId WHERE categoryName= @categoryname AND product.productName LIKE @name `;
-                }
-                results = await pool.request().input('categoryname', sql.VarChar, selectedCategory).input('name', sql.VarChar, name).query(sqlQ1);
-            }
-            else{
-                results=await pool.request().query(sqlQ1)
-            }
-            
-           
-            res.write("<table class='content-table'><thead><tr><th></th><th>Product Name</th><th>Category</th><th>Price</th></tr></thead>");
 
-            
+            let results = await pool
+                .request()
+                .input('categoryname', sql.VarChar, selectedCategory)
+                .input('name', sql.VarChar, `%${name}%`)
+                .query(sqlQ1);
 
-           
-            // if (name) {
-            //     sqlQ1=`SELECT product.productId, product.productName, product.productPrice as price, category.categoryName FROM product JOIN category ON product.categoryId = category.categoryId WHERE product.productName LIKE @name`
-            //     results = await pool.request().input('name', sql.VarChar, name).query(sqlQ1);
-            // }
-            console.log(sqlQ1);
-            console.log("sql connected");
-
-            console.log("sql query results ready");
-            console.log(results.recordset.length);
-
-            for (let i = 0; i < results.recordset.length; i++) {
-                let result = results.recordset[i];
+            results.recordset.forEach(result => {
                 let productName = result.productName;
                 let categoryName = result.categoryName;
                 let price = result.price.toFixed(2);
-                
 
-                res.write(`<tr><td><a href="addcart?id=${result.productId}&name=${encodeURIComponent(productName)}&price=${price}">Add to Cart</a></td><td><a href="product?id=${result.productId}">${productName}</a></td><td>${categoryName}</td><td>${result.price.toFixed(2)}</td></tr>`);
-            }
+                content += `
+                    <tr>
+                        <td><a href="addcart?id=${result.productId}&name=${encodeURIComponent(productName)}&price=${price}" class="btn btn-success">Add to Cart</a></td>
+                        <td><a href="product?id=${result.productId}">${productName}</a></td>
+                        <td>${categoryName}</td>
+                        <td>${price}</td>
+                    </tr>`;
+            });
+        } else {
+            let results = await pool.request().query(sqlQ1);
 
+            results.recordset.forEach(result => {
+                let productName = result.productName;
+                let categoryName = result.categoryName;
+                let price = result.price.toFixed(2);
 
-            res.write("</table>");
-            res.end();
-
-        } catch (err) {
-            console.dir(err);
-            res.write(JSON.stringify(err));
-            res.end();
-
-
+                content += `
+                    <tr>
+                        <td><a href="addcart?id=${result.productId}&name=${encodeURIComponent(productName)}&price=${price}" class="btn btn-success">Add to Cart</a></td>
+                        <td><a href="product?id=${result.productId}">${productName}</a></td>
+                        <td>${categoryName}</td>
+                        <td>${price}</td>
+                    </tr>`;
+            });
         }
-    })();
 
-    /** Create and validate connection **/
+        content += `
+        <body class="bg-image" 
+        style="background-image: url('/img/background.png');
+              height: 100vh;
+              background-size: cover;">
+                </table>
+            </div>
+            </body>
+        </html>`;
 
-    /** Print out the ResultSet **/
-
-    /** 
-    For each product create a link of the form
-    addcart?id=<productId>&name=<productName>&price=<productPrice>
-    **/
-
-    /**
-        Useful code for formatting currency:
-        let num = 2.89999;
-        num = num.toFixed(2);
-    **/
-
-
+        res.send(content);
+    } catch (err) {
+        console.dir(err);
+        res.write(JSON.stringify(err));
+        res.end();
+    }
 });
-module.exports = router;
 
+module.exports = router;
 
 
 
