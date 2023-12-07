@@ -1,22 +1,82 @@
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{productName}}</title>
     <link rel="stylesheet" href="/css/main.css">
-    <title>{{this.productName}}</title>
+     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 </head>
+<body>
+    <h1>{{productName}}</h1>
+    {{#if productImages.length}}
+        {{#each productImages}}
+            <img src="{{this}}" alt="Product Image">
+        {{/each}}
+    {{else}}
+        <p>No images available</p>
+    {{/if}}
+    <table>
+        <tr>
+            <th>Id</th>
+            <td>{{productId}}</td>
+        </tr>
+        <tr>
+            <th>Price</th>
+            <td>{{productPrice}}</td>
+        </tr>
+    </table>
+    <h2><a href="addcart?id={{productId}}&name={{productName}}&price={{productPrice}}">Add to cart</a></h2>
+    <h2><a href="listprod">Continue Shopping</a></h2>
+    
+    <h2>Leave a Review</h2>
+    <div class="container mt-3">
+    <form id="reviewForm" class = "text-center" >
+        <label for="review">Leave a Review:</label>
+        <textarea id="review" name="review" rows="4" cols="50"></textarea>
+        
+        <label for="rating">Rating:</label>
+        <select id="rating" name="rating">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+        </select>
+        <button type="button" onclick="submitReview()">Submit Review</button>
+    </form>
+    </div>
+    {{#if reviews.length}}
+        {{#each reviews}}
+            <div class="product-flex-row-buttons">
+                <h1>{{this.reviewRating}}/5</h1>
+                <div class="card-group">
+                    <div class="card product-card" style="width: 50rem;">
+                        <div class="card-body">
+                            <h4 class="card-title"><a>Anon reviewed {{this.productId}}
+                                on {{this.date}}</a></h4>
+                            <p class="card-text">{{this.comment}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {{/each}}
+    {{/if}}
 
-<div class="card mb-3" style="max-width: 540px;">
-  <div class="row g-5">
-    <div class="col-md-4">
-      <img src="{{this.productImageUrl}}" class="img-fluid rounded-start" alt="...">
-    </div>
-    <div class="col-md-8">
-      <div class="card-body">
-        <h5 class="card-title">{{this.productName}}</h5>
-        <p class="card-text">{{this.productDescription}}</p>
-        <p class="card-text"><small class="text-body-secondary">Price: {{this.productPrice}}</small></p>
-      </div>
-    </div>
-  </div>
-</div>
-<a class="btn btn-primary" href="/showcart" role="button">Add to cart</a>
+
+    <script>
+        function submitReview() {
+            // Get review data from the form
+            var reviewText = $('#review').val();
+            var rating = $('#rating').val();
+            var productId = '{{productId}}';
+
+            // Make an AJAX request to send the review data
+            $.post('/product/review', { productId: productId, review: reviewText, rating: rating })
+
+        }
+    </script>
+
+</body>
+</html>
 
