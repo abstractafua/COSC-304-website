@@ -64,7 +64,7 @@
 
 .content {
     padding: 2em;
-    font-family: 'Courier New', Courier, monospace;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     text-align: center;
 }
 
@@ -90,4 +90,8 @@
   display: inline-block;
   font-size: 16px;
 }
+
+  .tab{
+    padding: 3px;
+  }
 
