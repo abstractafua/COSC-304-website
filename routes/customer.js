@@ -4,6 +4,7 @@ const sql = require('mssql');
 const auth = require('../auth');
 
 router.get('/', function(req, res, next) {
+    // Allow user to edit their info such as address , names, password
     
     if (auth.checkAuthentication(req, res)) {
     res.setHeader('Content-Type', 'text/html');

@@ -17,16 +17,18 @@ router.post('/', function (req, res) {
 });
 
 async function validateLogin(req) {
-    if (!req.body || !req.body.username || !req.body.password) {
+    if (!req.body || !req.body.email || !req.body.password) {
         return false;
     }
-
-    let username = req.body.username;
+    
+    let username = req.body.email;
+   
     let password = req.body.password;
     let authenticatedUser = await (async function () {
+        console.log("s");
         try {
             let pool = await sql.connect(dbConfig);
-            let sqlQuery = "SELECT userid FROM customer WHERE userid=@user AND password=@pass";
+            let sqlQuery = "SELECT email,userid FROM customer WHERE email=@user AND password=@pass";
             let results = await pool.request().input('user', sql.VarChar, username)
                 .input('pass', sql.VarChar, password)
                 .query(sqlQuery);
@@ -47,6 +49,7 @@ async function validateLogin(req) {
             return false;
         }
     })();
+    
     return authenticatedUser;
 
 }
