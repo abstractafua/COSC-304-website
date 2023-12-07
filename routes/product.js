@@ -57,7 +57,6 @@ router.get('/', function(req, res, next) {
     })();
 });
 
-<<<<<<< HEAD
 
 async function getProductImages(productId, pool) {
     let sqlQuery = "SELECT productImageUrl FROM product WHERE productId = @id";
@@ -120,6 +119,3 @@ router.get('/product/review', async (req, res) => {
 
 module.exports = router;
 
-=======
-module.exports = router;
->>>>>>> 1fdbd0144d5cf965473ec0369836982053a63b66
