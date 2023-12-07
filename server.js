@@ -8,7 +8,7 @@ let loadData = require('./routes/loaddata');
 let listOrder = require('./routes/listorder');
 let listProd = require('./routes/listprod');
 let addCart = require('./routes/addcart');
-let showCart = require('./routes/showcart2');
+let showCart = require('./routes/showcart');
 let checkout = require('./routes/checkout');
 let order = require('./routes/order');
 let login = require('./routes/login');
@@ -75,6 +75,14 @@ hbs.handlebars.registerHelper('subtotal', function (price, quantity) {
     return (quantity * price).toFixed(2)
 })
 
+hbs.handlebars.registerHelper('check', function (productList) {
+  let resp = false;
+  
+  if(productList.length>=1)
+      resp = true;
+
+      return resp;
+})
 
 hbs.handlebars.registerHelper('total', function (productList) {
   let total = 0
@@ -87,6 +95,10 @@ hbs.handlebars.registerHelper('total', function (productList) {
   }
   return total.toFixed(2)
 })
+
+
+
+
 
 app.set('view engine', 'handlebars');
 

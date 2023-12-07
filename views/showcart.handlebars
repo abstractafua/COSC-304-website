@@ -1,69 +1,61 @@
-
 <head>
     <link rel="stylesheet" href="/css/main.css">
     <title>Your Shopping Cart</title>
 </head>
-
- <script>
+<script>
     function updateQuantity(productId, newQuantity) {
-            // Redirect to the showcart page with updated quantity in the URL
-         window.location = `showcart?updateAmount=` +  newQuantity + `&updateId=` + productId;
+        // Redirect to the showcart page with updated quantity in the URL
+        window.location = `showcart?updateAmount=` + newQuantity + `&updateId=` + productId;
     }
-
-    function removeItem(productId){
-
-        
-
-    }
+            function removeItem(productId) {
+            // Redirect to the showcart page with delete action
+            window.location = `showcart?delete=` + productId;
+            }
 </script>
-{{#if product}}
-<body>
+
+    {{#if product}}
     <div>
-    <form name="form1">
-        <h1>Your Shopping Cart</h1>
-        <table>
-            <tr>
-                <th>Product Id</th>
-                <th>Product Name</th>
-                <th>Quantity</th>
-                <th>Price</th>
-                <th>Subtotal</th>
-                <th>Actions</th>
-            </tr>
-
-            {{#each product}}
-            {{#if this}}
-               <tr>
-                            <td>{{this.id}}</td>
-                            <td>{{this.name}}</td>
-                            <td><label>
-                                <input type='number' min='1' step='1' id='newAmount{{this.id}}' value={{this.quantity}}>
-                            </label></td>
-                            <td>${{this.price}}</td>
-                            <td>${{subtotal this.price this.quantity}}</td>
-                            <td><a href='\showcart?delete={{this.id}}'> Remove Item from Cart </a></td>
-                            <td><input type=button onclick="updateQuantity({{this.id}}, document.form1.newAmount{{this.id}}.value)"
-                                     class="btn button-coloured"  value="Update Quantity"></td>
-                        </tr>
-                        {{/if}}
-            {{/each}}
-
-   <h2><a href="listprod">Continue Shopping</a></h2>
-     <tr>
-                <td colspan="4" align="left"><b>Order Total</b></td>
-                <td align="left">${{total product}}</td>
-            </tr>
-        </table>
-
-        <h2><a href="checkout">Check Out</a></h2>
-  </form>
-</div>
- {{else}}
+        <form name="form1">
+            <h1 class="space">Your Shopping Cart</h1>
+            <table>
+                <tr id ='info'>
+                    <th>Product Id</th>
+                    <th>Product Name</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Subtotal</th>
+                    <th>Actions</th>
+                </tr>
+                {{#each product}}
+                {{#if this}}
+                <tr>
+                    <td>{{this.id}}</td>
+                    <td>{{this.name}}</td>
+                    <td><label>
+                            <input type='number' min='1' step='1' id='newAmount{{this.id}}' value={{this.quantity}}>
+                        </label></td>
+                    <td>${{this.price}}</td>
+                    <td>${{subtotal this.price this.quantity}}</td>
+                    <td>
+                                    <!-- Use a button instead of a link -->
+                                    <button type="button" onclick="removeItem({{this.id}})">Remove Item from Cart</button>
+                                </td>
+                    <td><input type=button
+                            onclick="updateQuantity({{this.id}}, document.form1.newAmount{{this.id}}.value)"
+                            class="btn button-coloured" value="Update Quantity"></td>
+                </tr>
+                {{/if}}
+                {{/each}}
+                <tr id = "info">
+                    <td colspan="4" align="left"><b>Order Total</b></td>
+                    <td align="left">${{total product}}</td>
+                </tr>
+            </table>
+        </form>
+    </div>
+       <h2><a href="checkout">Check Out</a></h2>
+    {{else}}
         <h1>Your shopping cart is empty!</h1>
-        <h2><a href="listprod">Continue Shopping</a></h2>
-</body>
-
- {{/if}}
-
+    {{/if}}
+    <h2><a href="listprod">Continue Shopping</a></h2>
 </html>
-
