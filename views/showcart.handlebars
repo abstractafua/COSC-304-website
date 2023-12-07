@@ -1,5 +1,6 @@
 <head>
     <link rel="stylesheet" href="/css/main.css">
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <title>Your Shopping Cart</title>
 </head>
 <script>
@@ -14,9 +15,9 @@
 </script>
 
     {{#if product}}
-    <div>
-        <form name="form1">
-            <h1 class="space">Your Shopping Cart</h1>
+    <div class="container mt-3 content">
+        <form name="form1" class="container mt-5">
+            <h1 class=>Your Shopping Cart</h1>
             <table>
                 <tr id ='info'>
                     <th>Product Id</th>
@@ -24,7 +25,7 @@
                     <th>Quantity</th>
                     <th>Price</th>
                     <th>Subtotal</th>
-                    <th>Actions</th>
+                    <th class="tab">Actions</th>
                 </tr>
                 {{#each product}}
                 {{#if this}}

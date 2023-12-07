@@ -4,8 +4,9 @@ const sql = require('mssql');
 const fs = require('fs');
 
 router.get('/', function(req, res, next) {
-    res.write('<html><head><link rel="stylesheet" href="/css/main.css"></head><body>');
-    // res.setHeader('Content-Type', 'text/html');
+
+
+    let reviews = false;
     (async function() {
         let productId = req.query.id
         let sqlQuery="SELECT productName,productPrice from product WHERE productId= @productId"
@@ -22,7 +23,7 @@ router.get('/', function(req, res, next) {
     resultProduct=result.recordset[0];
     let productName=resultProduct.productName;
     let productPrice=resultProduct.productPrice.toFixed(2);
-    res.write("<h1>"+productName+"</h1>");
+    
 
 	// TODO: Retrieve any image stored directly in database. Note: Call displayImage.jsp with product id as parameter.
     sqlQuery="SELECT productImageUrl FROM product WHERE productId=@id"
@@ -32,23 +33,22 @@ router.get('/', function(req, res, next) {
         for(let i=0;i<result.recordset.length;i++){
             let resultUrl= result.recordset[i];
             let url = resultUrl.productImageUrl
-            if(url!=null){
-            res.write(`<img src="${url}">`);
+            if(url!=null){;
             }
         }
     }
-    res.write(`<img src="displayImage?id=${productId}" onerror="this.style.display='none'">`); 
-    res.write(`<table><tr><th>Id</th><td>${productId}</td></tr>`);
-    res.write(`<tr><th>Price</th><td>${productPrice}</td></tr>`);
-    res.write(`</table>`)
+   
     //work on getting the image from display image to not show as broken image
 
 	// TODO: Add links to Add to Cart and Continue Shopping
     
-    res.write(`<h2><a href="addcart?id=${productId}&name=${encodeURIComponent(productName)}&price=${productPrice}">Add to cart</a></h2>`);
-    res.write('<h2><a href="listprod">Continue Shopping</a></h2>');
 
-            res.end()
+            res.render('product', {productName: resultProduct.productName,
+                productPrice: resultProduct.productPrice.toFixed(2),
+                productId,
+                reviews,
+                productImages: await getProductImages(productId, pool),
+        });
         } catch(err) {
             console.dir(err);
             res.write(err + "")
@@ -57,4 +57,65 @@ router.get('/', function(req, res, next) {
     })();
 });
 
+
+async function getProductImages(productId, pool) {
+    let sqlQuery = "SELECT productImageUrl FROM product WHERE productId = @id";
+    let result = await pool.request().input('id', sql.Int, productId).query(sqlQuery);
+
+    return result.recordset.map(result => result.productImageUrl);
+}
+
+
+router.get('/product/review', async (req, res) => {
+
+    let rating;
+    if (req.query.rating) {
+        rating = req.query.rating
+    }
+
+    let customerId;
+    if (req.session.customerId) {
+        customerId = req.session.customerId
+    }
+
+
+    let productId;
+    if (req.session.productId) {
+        productId = req.session.productId
+    }
+    let user_comment = "";
+    if (req.query.reviewComment) {
+        user_comment = req.query.reviewComment
+    }
+
+        try {
+            SQL ="INSERT INTO review (reviewRating, reviewDate, customerId, productId, reviewComment) VALUES (@reviewRating, @reviewDate, @customerId, @productId, @reviewComment)"
+            let pool = await sql.connect(dbConfig)
+            let result= await pool.request().input('reviewRating', sql.Int,rating).input('reviewDate', sql.DATETIME, new Date()).input('customerId', sql.In, customerId).input('productId', sql.Int, req.query.id).input('reviewComment', sql.VarChar(50),user_comment).query(sqlQuery);
+            
+            reviews = {
+                reviewRating: result.recordset.reviewRating,
+                comment: user_comment,
+                userId: customerId,
+                productId,
+                date: new Date()
+            }
+            
+        } catch (err) {
+            console.dir(err)
+            res.end()
+        } finally {
+            pool.close()
+     
+
+        res.render("/product?id=" + productId)
+    res.json({ success: true, message: 'Review submitted successfully!' });
+
+    
+
+}});
+
+
+
 module.exports = router;
+

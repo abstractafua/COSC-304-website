@@ -4,10 +4,10 @@ const router = express.Router();
 
 router.get('/', function(req, res, next) {
 
-        let total = 0;
         let updateAmount = false;
         let removeItem = false;
         let productList = req.session.productList;
+        
 
         if(req.query.updateId){
             let updateID = req.query.updateId;
@@ -82,8 +82,9 @@ router.get('/', function(req, res, next) {
         //         if(value.length>0)
         //         productList =false;
         // })
-        // }    
+        // } 
         res.render('showcart', {product: productList});
+        
     
 
        

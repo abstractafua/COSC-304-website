@@ -7,7 +7,9 @@ router.get('/', async function (req, res, next) {
         // Get the product name to search for
         let name = req.query.productName;
         let selectedCategory = req.query.category;
-
+        let size = " ";
+        let productReviews = true;
+        
         // Build the main content
         let content = `
             <html>
@@ -59,6 +61,7 @@ router.get('/', async function (req, res, next) {
                     </thead>
                     <tbody>`;
 
+
         let sqlQ1 = `
             SELECT product.productId, product.productName, product.productPrice as price, category.categoryName
             FROM product
@@ -106,10 +109,10 @@ router.get('/', async function (req, res, next) {
 
                 content += `
                     <tr>
-                        <td><a href="addcart?id=${result.productId}&name=${encodeURIComponent(productName)}&price=${price}" class="btn btn-success">Add to Cart</a></td>
-                        <td><a href="product?id=${result.productId}">${productName}</a></td>
+                    <td><a href="addcart?id=${result.productId}&name=${encodeURIComponent(productName)}&price=${price}&size=${0}" class="btn btn-success">Add to Cart</a></td>
+                    <td><a href="product?id=${result.productId}">${productName}</a></td>
                         <td>${categoryName}</td>
-                        <td><select name="category" class="form-control my-2" id="category">
+                        <td><select name="category" class="form-control my-2" id="size">
                         <option value="3Y"> </option>
                         <option value="3Y">3Y</option>
                         <option value="4Y">4Y</option>
@@ -148,6 +151,8 @@ router.get('/', async function (req, res, next) {
         res.end();
     }
 });
+
+
 
 module.exports = router;
 

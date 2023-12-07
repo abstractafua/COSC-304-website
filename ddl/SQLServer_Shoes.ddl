@@ -90,6 +90,7 @@ CREATE TABLE incart (
     productId           INT,
     quantity            INT,
     price               DECIMAL(10,2),  
+    size                VARCHAR(5),
     PRIMARY KEY (orderId, productId),
     FOREIGN KEY (orderId) REFERENCES ordersummary(orderId)
         ON UPDATE CASCADE ON DELETE NO ACTION,
