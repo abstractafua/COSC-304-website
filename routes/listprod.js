@@ -28,8 +28,8 @@ router.get('/', async function (req, res, next) {
                         </script>
                         
                         <form method="get" action="/listprod" class="text-center">
-                            Product Name <input type="text" name="productName" class="form-control" size="25">
-                            Filter <select name="category" class="form-control" id="category">
+                            Product Name <input type="text" name="productName" class="form-control my-2" size="25">
+                            Filter <select name="category" class="form-control my-2" id="category">
                                 <option value="All">All</option>`;
 
         let categoryQuery = "SELECT DISTINCT categoryName FROM category";
@@ -41,8 +41,8 @@ router.get('/', async function (req, res, next) {
         });
 
         content += `</select>
-                    <input type="submit" class="btn btn-primary" value="Submit" onclick="change()">
-                    <input type="reset" class="btn btn-secondary" value="Reset">
+                    <input type="submit" class="btn btn-primary my-2" value="Submit" onclick="change()">
+                    <input type="reset" class="btn btn-secondary my-2" value="Reset">
                 </form>
             </div>
             <div class="container mt-3">
