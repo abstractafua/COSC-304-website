@@ -8,7 +8,7 @@ let loadData = require('./routes/loaddata');
 let listOrder = require('./routes/listorder');
 let listProd = require('./routes/listprod');
 let addCart = require('./routes/addcart');
-let showCart = require('./routes/showcart2');
+let showCart = require('./routes/showcart');
 let checkout = require('./routes/checkout');
 let order = require('./routes/order');
 let login = require('./routes/login');
@@ -68,6 +68,38 @@ const handlebarsHelpers = {
 app.engine('handlebars', exphbs({
   helpers: handlebarsHelpers,
 }));
+
+let hbs = exphbs.create({});
+
+hbs.handlebars.registerHelper('subtotal', function (price, quantity) {
+    return (quantity * price).toFixed(2)
+})
+
+hbs.handlebars.registerHelper('check', function (productList) {
+  let resp = false;
+  
+  if(productList.length>=1)
+      resp = true;
+
+      return resp;
+})
+
+hbs.handlebars.registerHelper('total', function (productList) {
+  let total = 0
+  for (let i = 0; i < productList.length; i++) {
+      let product = productList[i]
+      if (!product) {
+          continue
+      }
+      total = total + product.quantity * product.price
+  }
+  return total.toFixed(2)
+})
+
+
+
+
+
 app.set('view engine', 'handlebars');
 
 // Setting up where static assets should

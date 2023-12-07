@@ -3,58 +3,90 @@ const router = express.Router();
 
 
 router.get('/', function(req, res, next) {
-    let productList = false;
-    res.setHeader('Content-Type', 'text/html');
-    res.write('<html><head><link rel="stylesheet" href="/css/main.css"></head><body>');
-    res.write("<title>Your Shopping Cart</title>");
-
-
-    if (req.session.productList) {
-        productList = req.session.productList;
-        res.write("<h1>Your Shopping Cart</h1>");
-        res.write("<table><tr><th>Product Id</th><th>Product Name</th><th>Quantity</th>");
-        res.write("<th>Price</th><th>Subtotal</th></tr>");
 
         let total = 0;
-        for (let i = 0; i < productList.length; i++) {
-            product = productList[i];
-            if (!product) {
-                continue
+        let updateAmount = false;
+        let removeItem = false;
+        let productList = req.session.productList;
+
+        if(req.query.updateId){
+            let updateID = req.query.updateId;
+            updateAmount = req.query.updateAmount;
+
+            for (let i = 0; i < productList.length; i++) {
+                product = productList[i];
+                if (!product) {
+                    continue
+                }
+
+                if(product.id == updateID)
+                product.quantity = updateAmount;
+
+                SQL = "UPDATE incart SET quantity = @quantity WHERE productId=@productId";
+
+                (async function () {
+                    try {
+                        let pool = await sql.connect(dbConfig);
+                        await pool.request().input('quantity', sql.Int, updateAmount).input('productId',sql.Int, updateID).query(sqlQuery)
+
+                    }catch(err){
+
+                        console.log(err);
+
+                    }finally{
+                        pool.close()
+                    }
+
+            })
+            
             }
 
-            console.log(req.query); 
-            
-            res.write("<tr><td>" + product.id + "</td>");
-           res.write("<td>" + product.name + "</td>");
-
-       //     res.write("<td><img src='" + product.productImageURL + "' alt='" + product.name + "' width='50'></td>");
-
-            res.write("<td align=\"center\"><input type='number' min='1' value='"+ product.quantity + "'></td>");
-            
-          //  res.write("<td align=\"center\">" + product.quantity + "</td>");
-
-            res.write("<td align=\"right\">$" + Number(product.price).toFixed(2) + "</td>");
-            res.write("<td align=\"right\">$" + (Number(product.quantity.toFixed(2)) * Number(product.price)).toFixed(2)  + "</td>");
-        //    res.write("<td align=\"right\"><a href='/remove/i'>Remove Item</a></td>")
-            res.write("<td align=\"center\">" + "<a href='/remove/" + product.id+ "'>Remove Item</a>" + "</td>");
-            res.write("<td align=\"right\"><button onclick=''>Update Quantity</button></td>");
-            res.write("</tr>");
-          
-            total = total + product.quantity * product.price;
         }
+//&& req.session.productList >=1
+        if(req.query.delete){
+            removeItem = req.query.delete
 
+            for (let i = 0; i < productList.length; i++) {
+                product = productList[i];
+                if (!product) {
+                    continue
+                }
 
-        res.write("<tr><td colspan=\"4\" align=\"right\"><b>Order Total</b></td><td align=\"right\">$" + total.toFixed(2) + "</td></tr>");
-        res.write("</table>");
+            if(removeItem==product.id){
+                SQL = "DELETE FROM incart WHERE productId=@productId";
 
-        
-        res.write("<h2><a href=\"checkout\">Check Out</a></h2>");
-    } else{
-        res.write("<h1>Your shopping cart is empty!</h1>");
-    }
-    res.write('<h2><a href="listprod">Continue Shopping</a></h2>');
+                productList.splice(i, 1);
 
-    res.end();
+                (async function () {
+                    try {
+                        let pool = await sql.connect(dbConfig);
+                        await pool.request().input('productId',sql.Int, removeItem).query(sqlQuery)
+                    }catch(err){
+
+                        console.log(err);
+
+                    }finally{
+                        pool.close()
+                    }
+
+            })
+            
+            }
+            }
+        }
+        // }else{
+
+        //     (async function () {
+        //        let value = await req.session.productList
+
+        //         if(value.length>0)
+        //         productList =false;
+        // })
+        // }    
+        res.render('showcart', {product: productList});
+    
+
+       
 });
 
 
