@@ -1,16 +1,6 @@
-USE orders;
 
-DROP TABLE review;
-DROP TABLE shipment;
-DROP TABLE productinventory;
-DROP TABLE warehouse;
-DROP TABLE orderproduct;
-DROP TABLE incart;
-DROP TABLE product;
-DROP TABLE category;
-DROP TABLE ordersummary;
-DROP TABLE paymentmethod;
-DROP TABLE customer;
+
+USE orders;
 
 CREATE TABLE customer (
     customerId          INT IDENTITY,
