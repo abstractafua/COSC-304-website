@@ -19,6 +19,9 @@ let product = require('./routes/product');
 let displayImage = require('./routes/displayImage');
 let customer = require('./routes/customer');
 let ship = require('./routes/ship');
+let editInfo=require('./routes/editInfo');
+let updatePass=require('./routes/updatePass');
+let updateuserInfo=require('./routes/updateuserInfo');
 
 const app = express();
 
@@ -125,6 +128,9 @@ app.use('/product', product);
 app.use('/displayImage', displayImage);
 app.use('/customer', customer);
 app.use('/ship', ship);
+app.use('/editInfo', editInfo);
+app.use('/updatePass', updatePass);
+app.use('/updateuserInfo', updateuserInfo);
 
 
 // Starting our Express app

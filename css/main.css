@@ -1,6 +1,6 @@
 * {
     /* Change your font family */
-    font-family: 'Times New Roman', Times, serif;
+    font-family: 'Courier New', Courier, monospace;
     text-align: center;
     color: peru;
 }
@@ -9,21 +9,22 @@
     border-collapse: collapse;
     margin: 25px 0;
     font-size: 0.9em;
-    min-width: 400px;
+    /* min-width: 400px; */
+    width: 100%;
     border-radius: 5px 5px 0 0;
     overflow: hidden;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.361);
 }
 
 .content-table thead tr {
-    background-color: #009879;
+    background-color: #ab30e4;
     color: #ffffff;
     text-align: left;
     font-weight: bold;
 }
 
-.content-table th{
-    background-color: #009879;
+.content-table th {
+    background-color: #ab30e4;
     color: #ffffff;
     padding: 12px 15px;
 }
@@ -40,34 +41,53 @@
     background-color: #f3f3f3;
 }
 
+.content-table tbody tr:nth-of-type(odd) {
+    background-color: #f3f3f3;
+}
+
 .content-table tbody tr:last-of-type {
-    border-bottom: 2px solid #009879;
+    border-bottom: 2px solid #ab30e4;
 }
 
 .content-table tbody tr.active-row {
     font-weight: bold;
     color: #009879;
 }
-.info-block{
+
+.info-block {
     margin: auto;
     background-color: rgba(255, 255, 255, 0.644);
     width: 80%;
     border-radius: 1.2em;
     margin-bottom: 3em;
 }
-.content{
+
+.content {
     padding: 2em;
     font-family: 'Courier New', Courier, monospace;
     text-align: center;
 }
+
 .bg-success {
     --bs-bg-opacity: 1;
     background-color: rgba(var(--bs-success-rgb), var(--bs-bg-opacity)) !important;
-  }
+}
+
 .body {
     background-image: url("/img/background.png");
     height: 100vh;
     background-repeat: no-repeat;
     background-size: cover;
-  }
+}
+
+.button {
+    background-color: #ab30e4;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
 

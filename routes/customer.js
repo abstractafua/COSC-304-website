@@ -10,7 +10,12 @@ router.get('/', function(req, res, next) {
     res.setHeader('Content-Type', 'text/html');
 
     // Write the HTML head and link to CSS
-    res.write('<html><head><link rel="stylesheet" href="/css/main.css"></head><body>');
+    res.write(`<html><head><link rel="stylesheet" href="/css/main.css"></head><body class='body'>`);
+    res.write('<script>');
+    res.write('function edit() {');
+    res.write('  window.location.href = "/editInfo";');
+    res.write('}');
+    res.write('</script>')
     
     // TODO: Print Customer information
     
@@ -29,14 +34,16 @@ router.get('/', function(req, res, next) {
         res.write(`<tr><th>Customer ID</th><td>${result.customerId}</td></tr>`);
         res.write(`<tr><th>First Name</th><td>${result.firstName}</td></tr>`);
         res.write(`<tr><th>Last Name</th><td>${result.lastName}</td></tr>`);
-        res.write(`<tr><th>email</th><td>${result.email}</td></tr>`);
-        res.write(`<tr><th>phone number</th><td>${result.phonenum}</td></tr>`);
-        res.write(`<tr><th>address</th><td>${result.address}</td></tr>`);
-        res.write(`<tr><th>city</th><td>${result.city}</td></tr>`);
-        res.write(`<tr><th>state</th><td>${result.state}</td></tr>`);
-        res.write(`<tr><th>postal Code</th><td>${result.postalCode}</td></tr>`);
+        res.write(`<tr><th>E-mail</th><td>${result.email}</td></tr>`);
+        res.write(`<tr><th>Phone number</th><td>${result.phonenum}</td></tr>`);
+        res.write(`<tr><th>Address</th><td>${result.address}</td></tr>`);
+        res.write(`<tr><th>City</th><td>${result.city}</td></tr>`);
+        res.write(`<tr><th>State</th><td>${result.state}</td></tr>`);
+        res.write(`<tr><th>Postal Code</th><td>${result.postalCode}</td></tr>`);
         res.write(`<tr><th>Country</th><td>${result.country}</td></tr>`);
         res.write("</table>");
+
+        res.write("<button type='button' class='button' onclick=edit()>Edit profile</button>")
         res.end()
         } catch(err) {
             console.dir(err);
