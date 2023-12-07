@@ -48,9 +48,8 @@ router.get('/', function (req, res, next) {
                 .input('password', sql.VarChar, password)
                 .input('userid', sql.VarChar, req.session.authenticatedUser)
                     .query(Query);
-
-                let result = results.recordset[0];
-                 console.log(result+"All the details");
+                
+            
 
                 res.end()
             } catch (err) {

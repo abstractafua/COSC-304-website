@@ -55,7 +55,6 @@ router.get('/', function(req, res, next) {
             res.end();
         }
     })();
-    res.render('product', {productImageUrl: url});
 });
 
 module.exports = router;
