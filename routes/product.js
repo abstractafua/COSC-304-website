@@ -9,7 +9,7 @@ router.get('/', function(req, res, next) {
     let reviews = false;
     (async function() {
         let productId = req.query.id
-        let sqlQuery="SELECT productName,productPrice from product WHERE productId= @productId"
+        let sqlQuery="SELECT productName,productPrice,productDesc from product WHERE productId= @productId"
         try {
             let pool = await sql.connect(dbConfig);
 
@@ -23,6 +23,7 @@ router.get('/', function(req, res, next) {
     resultProduct=result.recordset[0];
     let productName=resultProduct.productName;
     let productPrice=resultProduct.productPrice.toFixed(2);
+    let productDesc=resultProduct.productDesc;
     
 
 	// TODO: Retrieve any image stored directly in database. Note: Call displayImage.jsp with product id as parameter.
@@ -48,6 +49,7 @@ router.get('/', function(req, res, next) {
                 productId,
                 reviews,
                 productImages: await getProductImages(productId, pool),
+                description:resultProduct.productDesc
         });
         } catch(err) {
             console.dir(err);
