@@ -22,6 +22,7 @@ let ship = require('./routes/ship');
 let editInfo=require('./routes/editInfo');
 let updatePass=require('./routes/updatePass');
 let updateuserInfo=require('./routes/updateuserInfo');
+let account=require('./routes/account');
 
 const app = express();
 
@@ -131,6 +132,7 @@ app.use('/ship', ship);
 app.use('/editInfo', editInfo);
 app.use('/updatePass', updatePass);
 app.use('/updateuserInfo', updateuserInfo);
+app.use('/account', account);
 
 
 // Starting our Express app

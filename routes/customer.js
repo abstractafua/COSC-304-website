@@ -7,7 +7,7 @@ router.get('/', function(req, res, next) {
     // Allow user to edit their info such as address , names, password
     
     if (auth.checkAuthentication(req, res)) {
-    res.setHeader('Content-Type', 'text/html');
+    // res.setHeader('Content-Type', 'text/html');
 
     // Write the HTML head and link to CSS
     res.write(`<html><head><link rel="stylesheet" href="/css/main.css"></head><body class='body'>`);
