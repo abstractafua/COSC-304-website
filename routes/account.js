@@ -169,6 +169,7 @@ router.post('/', async function (req, res) {
         let newAccount = await createAccount(req, res);
 
         if (newAccount) {
+            console.log(req.session.username);
             res.redirect("/")
         }
         else{
