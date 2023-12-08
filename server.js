@@ -61,8 +61,6 @@ app.use(
 );
 
 // Setting up the rendering engine
-
-
 const handlebarsHelpers = {
   subtotal: function (price, quantity) {
     return (price * quantity).toFixed(2);
@@ -73,19 +71,11 @@ app.engine('handlebars', exphbs({
   helpers: handlebarsHelpers,
 }));
 
+
 let hbs = exphbs.create({});
 
 hbs.handlebars.registerHelper('subtotal', function (price, quantity) {
     return (quantity * price).toFixed(2)
-})
-
-hbs.handlebars.registerHelper('check', function (productList) {
-  let resp = false;
-  
-  if(productList.length>=1)
-      resp = true;
-
-      return resp;
 })
 
 hbs.handlebars.registerHelper('total', function (productList) {
@@ -99,10 +89,6 @@ hbs.handlebars.registerHelper('total', function (productList) {
   }
   return total.toFixed(2)
 })
-
-
-
-
 
 app.set('view engine', 'handlebars');
 

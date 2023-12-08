@@ -34,7 +34,6 @@
     <form id="reviewForm" class = "text-center" >
         <label for="review">Leave a Review:</label>
         <textarea id="review" name="review" rows="4" cols="50"></textarea>
-        
         <label for="rating">Rating:</label>
         <select id="rating" name="rating">
             <option value="1">1</option>
@@ -43,18 +42,18 @@
             <option value="4">4</option>
             <option value="5">5</option>
         </select>
-        <button type="button" onclick="submitReview()">Submit Review</button>
+        <button type="button" onclick=submitReview()>Submit Review</button>
     </form>
     </div>
-    {{#if reviews.length}}
+    
+{{#if reviews.length}}
         {{#each reviews}}
             <div class="product-flex-row-buttons">
                 <h1>{{this.reviewRating}}/5</h1>
                 <div class="card-group">
                     <div class="card product-card" style="width: 50rem;">
                         <div class="card-body">
-                            <h4 class="card-title"><a>Anon reviewed {{this.productId}}
-                                on {{this.date}}</a></h4>
+                            <h4 class="card-title"><a>{{this.customerId}} reviewed {{this.productId}} on {{this.date}}</a></h4>
                             <p class="card-text">{{this.comment}}</p>
                         </div>
                     </div>
@@ -63,8 +62,7 @@
         {{/each}}
     {{/if}}
 
-
-    <script>
+     <script>
         function submitReview() {
             // Get review data from the form
             var reviewText = $('#review').val();
@@ -76,6 +74,7 @@
 
         }
     </script>
+
 
 </body>
 </html>

@@ -27,10 +27,9 @@ router.get('/', function(req, res, next) {
                 (async function () {
                     try {
                         let pool = await sql.connect(dbConfig);
-                        await pool.request().input('quantity', sql.Int, updateAmount).input('productId',sql.Int, updateID).query(sqlQuery)
+                        await pool.request().input('quantity', sql.Int, updateAmount).input('productId',sql.Int, updateID).query(SQL)
 
                     }catch(err){
-
                         console.log(err);
 
                     }finally{
@@ -42,7 +41,7 @@ router.get('/', function(req, res, next) {
             }
 
         }
-//&& req.session.productList >=1
+
         if(req.query.delete){
             removeItem = req.query.delete
 
@@ -54,13 +53,11 @@ router.get('/', function(req, res, next) {
 
             if(removeItem==product.id){
                 SQL = "DELETE FROM incart WHERE productId=@productId";
-
                 productList.splice(i, 1);
-
                 (async function () {
                     try {
                         let pool = await sql.connect(dbConfig);
-                        await pool.request().input('productId',sql.Int, removeItem).query(sqlQuery)
+                        await pool.request().input('productId',sql.Int, removeItem).query(SQL)
                     }catch(err){
 
                         console.log(err);
@@ -74,15 +71,7 @@ router.get('/', function(req, res, next) {
             }
             }
         }
-        // }else{
-
-        //     (async function () {
-        //        let value = await req.session.productList
-
-        //         if(value.length>0)
-        //         productList =false;
-        // })
-        // } 
+      
         res.render('showcart', {product: productList});
         
     
