@@ -2,6 +2,18 @@
 
 USE orders;
 
+DROP TABLE review;
+DROP TABLE shipment;
+DROP TABLE productinventory;
+DROP TABLE warehouse;
+DROP TABLE orderproduct;
+DROP TABLE incart;
+DROP TABLE product;
+DROP TABLE category;
+DROP TABLE ordersummary;
+DROP TABLE paymentmethod;
+DROP TABLE customer;
+
 CREATE TABLE customer (
     customerId          INT IDENTITY,
     firstName           VARCHAR(40),
@@ -86,6 +98,7 @@ CREATE TABLE incart (
         ON UPDATE CASCADE ON DELETE NO ACTION,
     FOREIGN KEY (productId) REFERENCES product(productId)
         ON UPDATE CASCADE ON DELETE NO ACTION
+
 );
 
 CREATE TABLE warehouse (
@@ -120,11 +133,11 @@ CREATE TABLE review (
     reviewId            INT IDENTITY,
     reviewRating        INT,
     reviewDate          DATETIME,   
-    customerId          INT,
+customerId          INT,
     productId           INT,
-    reviewComment       VARCHAR(1000),          
+    reviewComment       VARCHAR(100),          
     PRIMARY KEY (reviewId),
-    FOREIGN KEY (customerId) REFERENCES customer(customerId)
+FOREIGN KEY (customerId) REFERENCES customer(customerId)
         ON UPDATE CASCADE ON DELETE CASCADE,
     FOREIGN KEY (productId) REFERENCES product(productId)
         ON UPDATE CASCADE ON DELETE CASCADE
@@ -180,8 +193,6 @@ INSERT product(productName, categoryId, productDesc, productPrice) VALUES ('Chun
 INSERT product(productName, categoryId, productDesc, productPrice) VALUES ('Curry',4,'18 - 500 g pkgs.',97.00);
 INSERT product(productName, categoryId, productDesc, productPrice) VALUES ('Lobster',4,'12 - 200 ml jars',31.00);
 
-
-
 INSERT INTO warehouse(warehouseName) VALUES ('Main warehouse');
 INSERT INTO productInventory(productId, warehouseId, quantity, price) VALUES (1, 1, 5, 18);
 INSERT INTO productInventory(productId, warehouseId, quantity, price) VALUES (2, 1, 10, 19);
@@ -199,6 +210,8 @@ INSERT INTO customer (firstName, lastName, email, phonenum, address, city, state
 INSERT INTO customer (firstName, lastName, email, phonenum, address, city, state, postalCode, country, userid, password) VALUES ('Candace', 'Cole', 'cole@charity.org', '333-444-5555', '333 Central Crescent', 'Chicago', 'IL', '33333', 'United States', 'candace' , 'password');
 INSERT INTO customer (firstName, lastName, email, phonenum, address, city, state, postalCode, country, userid, password) VALUES ('Darren', 'Doe', 'oe@doe.com', '250-807-2222', '444 Dover Lane', 'Kelowna', 'BC', 'V1V 2X9', 'Canada', 'darren' , 'pw');
 INSERT INTO customer (firstName, lastName, email, phonenum, address, city, state, postalCode, country, userid, password) VALUES ('Elizabeth', 'Elliott', 'engel@uiowa.edu', '555-666-7777', '555 Everwood Street', 'Iowa City', 'IA', '52241', 'United States', 'beth' , 'test');
+INSERT INTO customer (firstName, lastName, email, phonenum, address, city, state, postalCode, country, userid, password) VALUES ('ANON', 'USER', 'NA', '000-000-000', ' Supreme Street', 'Kicks World', '', '123', 'Earth', 'Anonymous' , 'anon');
+
 
 -- Order 1 can be shipped as have enough inventory
 DECLARE @orderId int

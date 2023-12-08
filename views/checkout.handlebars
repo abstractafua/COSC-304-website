@@ -1,0 +1,53 @@
+<html>
+
+<head>
+    <link rel="stylesheet" href="/css/main.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <title>Grocery CheckOut Line</title>
+</head>
+
+<body>
+    <h1>Enter your Information to complete the transaction:</h1>
+    <form id="myForm" class="content" method="get" action="/order">
+        <table align="center">
+            <tr>
+                <td>Customer ID</td>
+                <td><input type="text" name="customerId" size="10"></td>
+            </tr>
+            <tr>
+                <td>Password</td>
+                <td><input type="password" name="password" size="20"></td>
+            </tr>
+            <tr>
+                <td>Postal Code</td>
+                <td><input type="text" name="postal" size="10"></td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="rating">Card type:</label>
+                    <select id="rating" name="rating">
+                        <option value="VISA">VISA</option>
+                        <option value="MASTERCARD">MASTERCARD</option>
+                        <option value="DEBIT">DEBIT</option>
+                        <option value="AMERICAN EXPRESS">AMERICAN EXPRESS</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Card Number</td>
+                <td><input type="number" name="card" size="20"></td>
+                <td>Expiry Date</td>
+                <td><input type="text" name="exp" size="5"></td>
+                <td>CVV</td>
+                <td><input type="number" name="cvv" size="5"></td>
+            </tr>
+            <tr>
+                <td><input align="center" type="submit" value="Submit"></td>
+                <td><input type="reset" value="Reset"></td>
+            </tr>
+        </table>
+    </form>
+</body>
+
+</html>

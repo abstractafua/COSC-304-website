@@ -7,6 +7,8 @@ router.get('/', function(req, res, next) {
 
 
     let reviews = false;
+
+
     (async function() {
         let productId = req.query.id
         let sqlQuery="SELECT productName,productPrice,productDesc from product WHERE productId= @productId"
@@ -42,7 +44,6 @@ router.get('/', function(req, res, next) {
     //work on getting the image from display image to not show as broken image
 
 	// TODO: Add links to Add to Cart and Continue Shopping
-    
 
             res.render('product', {productName: resultProduct.productName,
                 productPrice: resultProduct.productPrice.toFixed(2),
@@ -68,32 +69,21 @@ async function getProductImages(productId, pool) {
 }
 
 
+
+//CHANGE THIS
 router.get('/product/review', async (req, res) => {
 
-    let rating;
-    if (req.query.rating) {
-        rating = req.query.rating
-    }
-
-    let customerId;
-    if (req.session.customerId) {
-        customerId = req.session.customerId
-    }
 
 
-    let productId;
-    if (req.session.productId) {
-        productId = req.session.productId
-    }
-    let user_comment = "";
-    if (req.query.reviewComment) {
-        user_comment = req.query.reviewComment
-    }
+    if(req.query.reviewComment.length>1){ //if the user has something meaningful to contribute
+        let rating = req.query.rating
+        let customerId = "Anonymous"
+        let productId = req.session.productId;
 
         try {
             SQL ="INSERT INTO review (reviewRating, reviewDate, customerId, productId, reviewComment) VALUES (@reviewRating, @reviewDate, @customerId, @productId, @reviewComment)"
             let pool = await sql.connect(dbConfig)
-            let result= await pool.request().input('reviewRating', sql.Int,rating).input('reviewDate', sql.DATETIME, new Date()).input('customerId', sql.In, customerId).input('productId', sql.Int, req.query.id).input('reviewComment', sql.VarChar(50),user_comment).query(sqlQuery);
+            let result= await pool.request().input('reviewRating', sql.Int,rating).input('reviewDate', sql.DATETIME, new Date()).input('customerId', sql.VarChar, customerId).input('productId', sql.Int, req.query.id).input('reviewComment', sql.VarChar(50),user_comment).query(sqlQuery);
             
             reviews = {
                 reviewRating: result.recordset.reviewRating,
@@ -102,18 +92,24 @@ router.get('/product/review', async (req, res) => {
                 productId,
                 date: new Date()
             }
+
+            pool.close()
+            res.json({ success: true, message: 'Review submitted successfully! Thank you for your input.' });
+            res.render('product', { reviewRating: result.recordset.reviewRating,
+            comment: user_comment,
+            userId: customerId,
+            productId,
+            date: new Date()
+            });
             
         } catch (err) {
             console.dir(err)
             res.end()
-        } finally {
-            pool.close()
-     
+        }
 
-        res.render("/product?id=" + productId)
+    }else{
     res.json({ success: true, message: 'Review submitted successfully!' });
-
-    
+    res.render("/product?id=" + productId) 
 
 }});
 
