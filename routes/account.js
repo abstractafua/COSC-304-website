@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const sql = require('mssql');
-const auth = require('../auth');
 
 
 router.get('/', function (req, res, next) {
@@ -11,15 +10,7 @@ router.get('/', function (req, res, next) {
     // user should not be able to update email
     //give the user flexibility in updating password in edit user info
     // click submit should update database and then redirect to customer info page
-    let firstName = req.query.firstName;
-            let lastName = req.query.lastName;
-            let phoneNum = req.query.phoneNum;
-            let address = req.query.address;
-            let city = req.query.city;
-            let state = req.query.state;
-            let postalCode = req.query.postalCode;
-            let country = req.query.county;
-            let password=req.query.password;
+    
 
     
         res.setHeader('Content-Type', 'text/html');
@@ -36,35 +27,9 @@ router.get('/', function (req, res, next) {
     `);
 
         // TODO: Print Customer information
-
-        let Query = "INSERT INTO customer VALUES (@firstName,@lastName,@email,@phoneNum,@address,@city,@state,@postalCode,@country,@userid,@password)";
         (async function () {
             try {
-                let pool = await sql.connect(dbConfig);
-                // TODO: Print customer info
-                res.write("<table class='content-table'>");
-                console.log(req.session.userid);
-                let results = await pool.request()
-                .input('firstName', sql.VarChar, firstName)
-
-                .input('lastName', sql.VarChar, lastName)
-                .input('email', sql.VarChar, req.query.email)
-                .input('phoneNum', sql.VarChar, phoneNum)
                 
-                .input('address', sql.VarChar, address)
-                
-                .input('city', sql.VarChar, city)
-               
-                .input('state', sql.VarChar,state)
-               
-                .input('postalCode', sql.VarChar, postalCode)
-               
-                .input('country', sql.VarChar, country)
-                .input('userid', sql.VarChar, req.query.userid)
-                .input('password', sql.VarChar, password)
-                
-                
-                    .query(Query);
 
         
                 res.write(`<style> 
@@ -98,7 +63,7 @@ router.get('/', function (req, res, next) {
         }
     </style>`);
 
-                res.write(`<form method="get" action="/account">`);
+                res.write(`<form method="post" action="/account">`);
                 res.write(`<table class='content-table'>`);
                 res.write(`<tr><th>First Name</th><td style="padding: 0;"><input type="text" name="firstName"></td></tr>`);
                 res.write(`<tr><th>Last Name</th><td style="padding: 0;"><input type="text" name="lastName"></td></tr>`);
@@ -122,6 +87,96 @@ router.get('/', function (req, res, next) {
             }
         })();
     
+});
+
+async function createAccount(req,res){
+    let validInput=true;
+    if (!req.body.firstName || !req.body.lastName || !req.body.userid ||
+        !req.body.email || !req.body.password || !req.body.address || !req.body.phoneNum ||
+        !req.body.city || !req.body.state || !req.body.postalCode || !req.body.country) {
+
+        req.session.loginMessage = "There was data missing from the account creation form. Please try again."
+        return false;
+    }
+
+    let check = "SELECT * FROM customer WHERE email = @email";
+    
+    let Query = "INSERT INTO customer VALUES (@firstName,@lastName,@email,@phoneNum,@address,@city,@state,@postalCode,@country,@userid,@password)";
+    let createaccount = await (async () => {
+        
+
+        let firstName = req.body.firstName;
+            let lastName = req.body.lastName;
+            let email=req.body.email;
+            let phoneNum = req.body.phoneNum;
+            let address = req.body.address;
+            let city = req.body.city;
+            let state = req.body.state;
+            let postalCode = req.body.postalCode;
+            let country = req.body.county;
+            let userid=req.body.userid;
+            let password=req.body.password;
+
+
+            let pool = await sql.connect(dbConfig);
+
+            let r = await pool.request()
+                    .input('email', sql.VarChar, email)
+                    .query(check);
+        
+        console.log(r.recordset.length);
+        if(r.recordset.length>0){
+            console.log("I came here.");
+            req.session.loginMessage="Account already exists. Login";
+            validInput=false;
+           return false;
+        }
+
+        
+                // TODO: Print customer info
+                console.log(req.session.userid);
+                r = await pool.request()
+                .input('firstName', sql.VarChar, firstName)
+
+                .input('lastName', sql.VarChar, lastName)
+                .input('email', sql.VarChar, email)
+                .input('phoneNum', sql.VarChar, phoneNum)
+                
+                .input('address', sql.VarChar, address)
+                
+                .input('city', sql.VarChar, city)
+               
+                .input('state', sql.VarChar,state)
+               
+                .input('postalCode', sql.VarChar, postalCode)
+               
+                .input('country', sql.VarChar, country)
+                .input('userid', sql.VarChar, userid)
+                .input('password', sql.VarChar, password)
+                
+                
+                    .query(Query);
+                return true;
+    })();
+    return createaccount;
+}
+
+router.post('/', async function (req, res) {
+    // Have to preserve async context since we make an async call
+    // to the database in the validateLogin function.
+
+    (async () => {
+        let newAccount = await createAccount(req, res);
+
+        if (newAccount) {
+            console.log(req.session.username);
+            res.redirect("/")
+        }
+        else{
+            res.redirect("/login");
+        }
+    })();
+
 });
 
 module.exports = router;
