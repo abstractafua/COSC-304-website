@@ -10,10 +10,20 @@ router.get('/', function (req, res, next) {
     let results=false;
     let sqlQuery = "SELECT customerId FROM customer";
 
-    if(req.session.validation == false){
-         res.write("<h1> The ID or password you entered was incorrect. Please go back and try again.</h1>");
-         return res.end();
-    }
+    if (req.query.result1) {
+        res.write("<h1> The ID or password you entered was incorrect. Please go back and try again.</h1>");
+        return res.end();
+    }else if (req.query.result2) {
+        res.write("<h1> The password you entered was incorrect. Please go back and try again.</h1>");
+        return res.end();
+    }else if(req.query.result3){
+        res.write("<h1>We have no record of you</h1>");
+        res.write('<h1><a href="/account">Create an account</a></h1>');
+    }else{
+        validation = true;
+    
+      } 
+
 
     if (req.session.productList && req.session.productList.length > 0) {
         productList = req.session.productList;
@@ -32,7 +42,8 @@ router.get('/', function (req, res, next) {
                         res.end();
                        return;
                     }if (results.recordset.length == 0) { //if the resultset does not return a customer id
-                        res.write("<h3>Customer Id not found</h3>");
+                        res.write("<h1>We have no record of you</h1>");
+                        res.write('<h1><a href="/account">Create an account</a></h1>');
                         
                     }
                     else {// if the result set returns a customer id
