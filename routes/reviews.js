@@ -22,7 +22,7 @@ router.get('/', function(req, res, next) {
                let SQL ="INSERT INTO review(reviewRating, reviewDate, customerId, productId, reviewComment) VALUES (@reviewRating, @reviewDate, @customerId, @productId, @reviewComment)"
                 console.log("comment has actually been recorded")
                 let pool =  await sql.connect(dbConfig);
-                  await pool.request().input('reviewRating', sql.Int,rating).input('reviewDate', sql.DATETIME, new Date().getTime).input('customerId', sql.In, customerId).input('productId', sql.Int,productId).input('reviewComment', sql.VarChar(50),user_comment).query(SQL);    
+                  await pool.request().input('reviewRating', sql.Int,rating).input('reviewDate', sql.DateTime, new Date()).input('customerId', sql.Int, customerId).input('productId', sql.Int,productId).input('reviewComment', sql.VarChar(50),user_comment).query(SQL);    
                       pool.close();
                 
             } catch (err) {
@@ -30,7 +30,7 @@ router.get('/', function(req, res, next) {
                 res.end()
             } 
 
-        });
+        })();
     
     
             content = `<!DOCTYPE html>
