@@ -17,7 +17,7 @@ router.get('/', function(req, res, next) {
         console.log(productId);
         console.log(user_comment);
         
-        (async function() {
+        (async function(){
             try {
                let SQL ="INSERT INTO review(reviewRating, reviewDate, customerId, productId, reviewComment) VALUES (@reviewRating, @reviewDate, @customerId, @productId, @reviewComment)"
                 console.log("comment has actually been recorded")

@@ -67,16 +67,29 @@
     </div>
                 
     
-     <script>
+   <script>
         function submitReview() {
-               console.log('Button clicked');
-               alert("Thank you for submitting a review with us");
+            console.log('Button clicked');
+            alert("Thank you for submitting a review with us");
+
             // Get review data from the form
             var reviewText = $('#review').val();
             var rating = $('#rating').val();
+            var productId = {{productId}};
 
-            window.location = `/reviews?id=` + {{productId}}+ `&rating=` + rating +`&reviewComment=` + reviewText;
-    
+            // Make an AJAX request to send the review data
+            $.ajax({
+                type: 'GET',
+                url: `/review`,
+                data: { productId: productId, review: reviewText, rating: rating },
+                success: function (response) {
+                    // Update the reviews container with the new data
+                    $('#reviewsContainer').html(response);
+                },
+                error: function (error) {
+                    console.error('Error submitting review:', error);
+                }
+            });
         }
     </script>
 </body>

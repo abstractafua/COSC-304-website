@@ -53,9 +53,12 @@ router.get('/', function(req, res, next) {
             res.render('product', {productName: resultProduct.productName,
                 productPrice: resultProduct.productPrice.toFixed(2),
                 productId,
+                reviews : reviews,
                 productImages: await getProductImages(productId, pool),
         });
-        }}catch(err) {
+
+        }  
+    }catch(err) {
             console.dir(err);
             res.write(err + "")
             res.end();
