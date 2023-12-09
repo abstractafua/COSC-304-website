@@ -43,14 +43,30 @@ router.get('/', function(req, res, next) {
 
 	// TODO: Add links to Add to Cart and Continue Shopping
     
+      SQL = "SELECT * FROM review WHERE productId=@productId";    
+            let poolR = await sql.connect(dbConfig);
+             result= poolR.request().input('productId',sql.Int,productId).query(SQL);
 
+            if(result.recordset){
+            let reviews = result.recordset;
+            
             res.render('product', {productName: resultProduct.productName,
                 productPrice: resultProduct.productPrice.toFixed(2),
                 productId,
-                reviews,
                 productImages: await getProductImages(productId, pool),
-                description:resultProduct.productDesc
-        });
+                description:resultProduct.productDesc,
+                reviews: reviews});
+
+            }else{
+                res.render('product', {productName: resultProduct.productName,
+                    productPrice: resultProduct.productPrice.toFixed(2),
+                    productId,
+                    productImages: await getProductImages(productId, pool),
+                    description:resultProduct.productDesc,
+                    reviews: false
+                 });
+
+            }
         } catch(err) {
             console.dir(err);
             res.write(err + "")
