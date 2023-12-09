@@ -23,6 +23,10 @@ let editInfo=require('./routes/editInfo');
 let updatePass=require('./routes/updatePass');
 let updateuserInfo=require('./routes/updateuserInfo');
 let account=require('./routes/account');
+let forgotPassword=require('./routes/forgotPassword');
+let forgotPass=require('./routes/forgotPass');
+
+
 
 const app = express();
 
@@ -119,6 +123,9 @@ app.use('/editInfo', editInfo);
 app.use('/updatePass', updatePass);
 app.use('/updateuserInfo', updateuserInfo);
 app.use('/account', account);
+app.use('/forgotPass', forgotPass);
+app.use('/forgotPassword', forgotPassword);
+
 
 
 // Starting our Express app

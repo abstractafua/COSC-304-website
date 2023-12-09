@@ -3,15 +3,13 @@ const router = express.Router();
 const sql = require('mssql');
 
 
-async function forgotPassed(req, res) {
-    res.setHeader('Content-Type', 'text/html');
-
+async function forgotPassed(req) {
    let query="SELECT * FROM customer WHERE email=@email";
    let email= req.body.email;
     let pass1= req.body.pass1;
     let pass2= req.body.pass2;
 
-    if(!req.body || !req.email ||!req.pass1 ||!req.pass2){
+    if(!req.body.email ||!req.body.pass1 ||!req.body.pass2){
         req.session.alert = "All fields not entered";
        return false;
     }
@@ -25,7 +23,7 @@ async function forgotPassed(req, res) {
         return false;
     }
 
-    await (async() =>{
+    let forgotPass =await (async() =>{
         try {
 
             let pool = await sql.connect(dbConfig);
@@ -40,19 +38,17 @@ async function forgotPassed(req, res) {
                 req.session.alert = "Email not found. Create an account";
                 return false;
             }
-            else{
+            
                 query="UPDATE customer SET password=@password WHERE email=@email";
                 r=await pool.request()
-                .input('password',sql.VarChar,password)
+                .input('password',sql.VarChar,pass1)
                 .input('email',sql.VarChar,email)
                 .query(query);
                 return true;
-            }
+
             
         } catch (err) {
             console.dir(err);
-            res.write(err + "")
-            res.end();
         }
     })();
     return forgotPass;
@@ -63,13 +59,13 @@ router.post('/', async function (req, res) {
     // to the database in the validateLogin function.
 
     (async () => {
-        let forgotPass = await forgotPassed(req, res);
+        let forgotPass = await forgotPassed( req);
 
         if (forgotPass) {
             res.redirect("/login")
         }
         else {
-            res.redirect("/forgotPass");
+            res.redirect("/forgotPassword");
         }
     })();
 
