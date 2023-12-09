@@ -13,26 +13,37 @@ router.get('/', async function (req, res, next) {
     res.write('<tr><td><input type="submit" value="Submit"><input type="reset" value="Reset"></td></tr>');
     res.write('</table></form>');
 
-
     let validation = false;
     let customerId = req.query.customerId;
     let password = req.query.password;
+    let result1=false;
+    let result2=false;
+    let result3 =false;
 
-    SQL = "SELECT * FROM customer WHERE password = @password"; // Fixed the SQL query
-
+    SQL1 = "SELECT * FROM customer WHERE password = @password AND customerId=@customerId";
+     // Fixed the SQL query
+    SQL2 = "SELECT * FROM customer WHERE customerId=@customerId"
+    SQL3 = "SELECT * FROM customer WHERE password=@password"
     try {
         if (customerId && password) {
             console.log("user info entered");
             let pool = await sql.connect(dbConfig);
-            let results = await pool.request().input('password', sql.VarChar, password).query(SQL);
+             result1 = await pool.request().input('password', sql.VarChar, password).input('customerId', sql.Int, customerId).query(SQ1);
             console.log("Database entered");
-
-            if (results.recordset.length <= 0) {
-                res.write("<h1> The ID or password you entered was incorrect. Please go back and try again.</h1>");
+            if (result1.recordset.length <= 0) {
+                result1=true;
+                 result2 = await pool.request().input('password', sql.VarChar, password).query(SQ2);
+            }else if (result2.recordset.length <= 0) {
+                result2=true;
+                result3 = await pool.request().input('customerId', sql.Int, customerId).query(SQ3);
+            }else if(result3.recordset.length <= 0){
+             result3=true;
             }else{
-                validation = true;
+              
+               validation = true;
             }
-        }
+            }
+        
  }catch (err) {
         console.dir(err);
        return res.write("<h1> Error...The ID or password you entered was incorrect. Please try again.</h1>");
