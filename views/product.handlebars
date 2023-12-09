@@ -54,9 +54,12 @@
     
 
         <div class="container">
+            <p >"I exist in here"+{{reviews}}</p>
         {{#if reviews.length}}
+        <p >"I exist in here"</p>
         {{#each reviews}}
             <div class="review">
+                
                 <div class="rating">RATING {{this.reviewRating}}</div>
                 <div class="comment">{{this.reviewComment}}</div>
                 <div class="comment">{{this.reviewDate}}</div>
