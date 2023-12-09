@@ -26,7 +26,7 @@ let updateuserInfo=require('./routes/updateuserInfo');
 let account=require('./routes/account');
 let forgotPassword=require('./routes/forgotPassword');
 let forgotPass=require('./routes/forgotPass');
-
+let showCustomers=require('./routes/showCustomers');
 
 
 const app = express();
@@ -127,7 +127,7 @@ app.use('/updateuserInfo', updateuserInfo);
 app.use('/account', account);
 app.use('/forgotPass', forgotPass);
 app.use('/forgotPassword', forgotPassword);
-
+app.use('/showCustomers', showCustomers);
 
 
 // Starting our Express app
