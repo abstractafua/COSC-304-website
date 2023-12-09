@@ -3,16 +3,14 @@ const router = express.Router();
 const sql = require('mssql');
 
 router.get('/', async function (req, res, next) {
-    res.write('<html><head><link rel="stylesheet" href="/css/main.css"></head><body>  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">');
+    res.write('<html><head><link rel="stylesheet" href="/css/main.css"></head><body>');
+  //  res.setHeader('Content-Type', 'text/html');
     res.write("<title>Grocery CheckOut Line</title>");
-    res.write(`<body class="bg-image" 
-    style="background-image: url('/img/background.png');
-          background-size: cover;">`)
     res.write("<h1>Enter your customer id and Password to complete the transaction:</h1>");
-    res.write('<form id="myForm" method="get" action="/order class="text-center"">');
-    res.write('<table class= "mx-auto"><tr><td>Customer ID:</td><td><input type="text" name="customerId" size="20"></td></tr>');
+    res.write('<form id="myForm" method="get" action="/order">');
+    res.write('<table><tr><td>Customer ID:</td><td><input type="text" name="customerId" size="20"></td></tr>');
     res.write('<tr><td>Password:</td><td><input type="password" name="password" size="20"></td></tr>');
-    res.write('<tr><td colspan="2" class="d-flex justify-content-end"><input type="submit" value="Submit"><input type="reset" value="Reset"></td></tr>');
+    res.write('<tr><td><input type="submit" value="Submit"><input type="reset" value="Reset"></td></tr>');
     res.write('</table></form>');
 
     let validation = false;
@@ -62,6 +60,5 @@ router.get('/', async function (req, res, next) {
 // });
 
 module.exports = router;
-
 
 
