@@ -55,20 +55,7 @@ router.get('/', function(req, res, next) {
                 productPrice: resultProduct.productPrice.toFixed(2),
                 productId,
                 productImages: await getProductImages(productId, pool),
-                description:resultProduct.productDesc,
-                reviews: reviews});
-
-            }else{
-                console.log("no reviews rn");
-                res.render('product', {productName: resultProduct.productName,
-                    productPrice: resultProduct.productPrice.toFixed(2),
-                    productId,
-                    productImages: await getProductImages(productId, pool),
-                    description:resultProduct.productDesc,
-                    reviews: false
-                 });
-
-            }
+        });
         } catch(err) {
             console.dir(err);
             res.write(err + "")

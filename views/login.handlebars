@@ -1,10 +1,14 @@
 <div class="mb-3">
 
     <h3 style="color:aliceblue">Please Login to System</h3>
-
     {{#if loginMessage}}
-        <p>{{loginMessage}}</p>
+    <div class="alert alert-danger" role="alert">{{loginMessage}}</div>
+        <!--<p style="color:aliceblue">{{loginMessage}}</p>-->
     {{/if}}
+    {{#if authenticatedUser}}
+    <div class="alert alert-danger" role="alert">Invalid username or password</div>
+    {{/if}}
+    
 
     <br>
     <form name="MyForm" method=post action="/validateLogin">
@@ -16,7 +20,9 @@
         <label for="exampleInputPassword1" class="form-label" style="color:aliceblue">Password</label>
         <input type="password" name="password" class="form-control" id="exampleInputPassword1">
     </div>
+    
     <button type="submit" class="btn btn-primary">Submit</button>
+    <a href="/forgotPassword" class="btn btn-outline-light" role="button">Forgot Password</a>
     </form>
 
 </div>

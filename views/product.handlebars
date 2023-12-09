@@ -8,6 +8,25 @@
      <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 </head>
 <body>
+    <div class="card mb-3" style="max-width: 1000px;">
+    <div class="row g-0">
+        <div class="col-md-4">
+        <img src="..." class="img-fluid rounded-start" alt="...">
+        </div>
+        <div class="col-md-8">
+        <div class="card-body">
+            <p class="card-text" align="left">ID: {{productId}}</p>
+            <p class="card-text">Price: {{productPrice}}</p>
+            <h5 class="card-title">{{productName}}</h5>
+            <p class="card-text">{{description}}</p>
+            <div class="d-grid gap-2 col-6 mx-auto">
+                <a class="btn btn-primary" type="button" href="addcart?id={{productId}}&name={{productName}}&price={{productPrice}}">Add to cart</a>
+                <a href="/listprod" class="btn btn-primary" role="button" >Continue Shopping</a>
+            </div>
+        </div>
+        </div>
+    </div>
+    </div>
     <h1>{{productName}}</h1>
     {{#if productImages.length}}
         {{#each productImages}}
