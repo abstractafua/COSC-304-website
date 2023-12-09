@@ -50,9 +50,9 @@ router.get('/', function (req, res, next) {
         }
     </style>`);
 
-                res.write(`<form method="get" action="/updateuserInfo">`);
+                res.write(`<form method="post" action="/updateuserInfo">`);
                 res.write(`<table class='content-table'>`);
-                res.write(`<tr><th>Password</th><td style="padding: 0;"><input type="text" name="password"></td></tr>`);
+                res.write(`<tr><th>Password</th><td style="padding: 0;"><input type="password" name="password"></td></tr>`);
                 res.write(`</table>`);
                 res.write(`<button type='submit' class='button'onclick="save()">Save changes</button>`);
                 res.write(`</form>`);
