@@ -95,3 +95,36 @@
     padding: 3px;
   }
 
+
+.container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.review {
+    border-bottom: 1px solid #ccc;
+    padding: 10px 0;
+    margin-bottom: 10px;
+}
+
+.rating {
+    font-size: 18px;
+    color: #f39c12; /* Adjust the color based on your design */
+    margin-bottom: 5px;
+}
+
+.comment {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.user-info {
+    font-size: 14px;
+    color: #555;
+}
+
+

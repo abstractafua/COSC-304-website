@@ -11,6 +11,7 @@ let addCart = require('./routes/addcart');
 let showCart = require('./routes/showcart');
 let checkout = require('./routes/checkout');
 let order = require('./routes/order');
+let reviews = require('./routes/reviews')
 let login = require('./routes/login');
 let validateLogin = require('./routes/validateLogin');
 let logout = require('./routes/logout');
@@ -107,6 +108,7 @@ app.use('/addcart', addCart);
 app.use('/showcart', showCart);
 app.use('/checkout', checkout);
 app.use('/order', order);
+app.use('/reviews', reviews);
 app.use('/login', login);
 app.use('/validateLogin', validateLogin);
 app.use('/logout', logout);
@@ -123,11 +125,3 @@ app.use('/account', account);
 
 // Starting our Express app
 app.listen(3000);
-
-
-// Rendering the main page
-// app.get('/', function (req, res) {
-//   res.render('index', {
-//     title: 'YOUR NAME Grocery Main Page',
-//   });
-// });
