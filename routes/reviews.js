@@ -23,7 +23,6 @@ router.get('/', function(req, res, next) {
                 console.log("comment has actually been recorded")
                 let pool =  await sql.connect(dbConfig);
                   await pool.request().input('reviewRating', sql.Int,rating).input('reviewDate', sql.DATETIME, new Date().getTime).input('customerId', sql.In, customerId).input('productId', sql.Int,productId).input('reviewComment', sql.VarChar(50),user_comment).query(SQL);    
-                
                       pool.close();
                 
             } catch (err) {
