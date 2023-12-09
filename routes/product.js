@@ -6,7 +6,6 @@ const fs = require('fs');
 router.get('/', function(req, res, next) {
 
 
-   
     (async function() {
         let productId = req.query.id
         let sqlQuery="SELECT productName,productPrice,productDesc from product WHERE productId= @productId"
@@ -56,7 +55,7 @@ router.get('/', function(req, res, next) {
                 productId,
                 productImages: await getProductImages(productId, pool),
         });
-        } catch(err) {
+        }}catch(err) {
             console.dir(err);
             res.write(err + "")
             res.end();
