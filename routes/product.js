@@ -43,12 +43,13 @@ router.get('/', function(req, res, next) {
 
 	// TODO: Add links to Add to Cart and Continue Shopping
     
-      SQL = "SELECT * FROM review WHERE productId=@productId";    
+      SQL="SELECT * FROM review WHERE productId=@productId";    
             let poolR = await sql.connect(dbConfig);
-             result= poolR.request().input('productId',sql.Int,productId).query(SQL);
+             result=await poolR.request().input('productId',sql.Int,productId).query(SQL);
 
             if(result.recordset){
             let reviews = result.recordset;
+            console.log(reviews);
             
             res.render('product', {productName: resultProduct.productName,
                 productPrice: resultProduct.productPrice.toFixed(2),
@@ -58,6 +59,7 @@ router.get('/', function(req, res, next) {
                 reviews: reviews});
 
             }else{
+                console.log("no reviews rn");
                 res.render('product', {productName: resultProduct.productName,
                     productPrice: resultProduct.productPrice.toFixed(2),
                     productId,

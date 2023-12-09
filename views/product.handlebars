@@ -30,7 +30,7 @@
     <h2><a href="listprod">Continue Shopping</a></h2>
     
     <h2>Leave a Review</h2>
-    <div class="container mt-3">
+    <div class="container">
     <form id="reviewForm" class = "text-center">
         <label for="review">Leave a Review:</label>
         <textarea id="review" name="review" rows="4" cols="50"></textarea>
@@ -48,14 +48,15 @@
 
     <div>
 
+    </div>
 
+    <div>
 
-    
     </div>
 
         <div class="container">
         <h1>User Reviews</h1>
-        {{#if reviews}}
+        {{#if reviews.length}}
         {{#each reviews}}
             <div class="review">
                 <div class="rating">RATING {{this.reviewRating}}</div>
@@ -74,11 +75,9 @@
             // Get review data from the form
             var reviewText = $('#review').val();
             var rating = $('#rating').val();
-            var productId = '{{productId}}';
 
-            window.location = `/reviews?id=` + productId + `rating=` + rating +`reviewComment=` + reviewText;
-            
-
+            window.location = `/reviews?id=` + {{productId}}+ `&rating=` + rating +`&reviewComment=` + reviewText;
+    
         }
     </script>
 </body>
